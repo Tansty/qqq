@@ -211,14 +211,16 @@ install_buildx_plugin_if_needed() {
 
   info "安装新版 Docker Buildx 插件"
   run_as_root mkdir -p /usr/local/lib/docker/cli-plugins
-  run_as_root curl -fSL \
-    "https://github.com/docker/buildx/releases/latest/download/buildx-v0.21.2.linux-${arch}" \
-    -o /usr/local/lib/docker/cli-plugins/docker-buildx
+  if ! run_as_root curl -fSL \
+    "https://github.com/docker/buildx/releases/download/v0.21.2/buildx-v0.21.2.linux-${arch}" \
+    -o /usr/local/lib/docker/cli-plugins/docker-buildx; then
+    echo "Docker Buildx 下载失败，将稍后使用 docker build 兜底。" >&2
+    return
+  fi
   run_as_root chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx
 
   if ! buildx_version_ok; then
-    echo "Docker Buildx 插件安装失败，请检查网络或手动安装 buildx >= 0.17.0。" >&2
-    exit 1
+    echo "Docker Buildx 插件版本仍不足，将稍后使用 docker build 兜底。" >&2
   fi
 }
 
