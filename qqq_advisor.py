@@ -15,6 +15,7 @@ import csv
 import json
 import math
 import os
+import re
 import ssl
 import statistics
 import sys
@@ -499,6 +500,92 @@ def require_min_qqq_bars(bars: list[Bar], source: str) -> list[Bar]:
     return bars
 
 
+def parse_market_number(value: Any) -> float:
+    if isinstance(value, (int, float)):
+        return float(value)
+    text = str(value).strip().replace("$", "").replace(",", "")
+    if text in {"", "--", "N/A", "null"}:
+        raise ValueError("empty market number")
+    return float(text)
+
+
+def parse_market_date(value: Any) -> date:
+    text = str(value).strip()
+    for fmt in ("%Y-%m-%d", "%m/%d/%Y", "%d/%m/%Y", "%b %d, %Y", "%B %d, %Y"):
+        try:
+            return datetime.strptime(text[:10] if fmt == "%Y-%m-%d" else text, fmt).date()
+        except ValueError:
+            continue
+    raise ValueError(f"unsupported market date: {value}")
+
+
+def collect_investing_rows(value: Any) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    if isinstance(value, list):
+        for item in value:
+            rows.extend(collect_investing_rows(item))
+    elif isinstance(value, dict):
+        keys = {str(key).lower() for key in value}
+        has_date = bool(keys & {"date", "rowdate", "row_date", "pricedate", "time"})
+        has_close = bool(keys & {"close", "price", "last_close", "lastcloseraw", "last_close_raw"})
+        if has_date and has_close:
+            rows.append(value)
+        for item in value.values():
+            if isinstance(item, (dict, list)):
+                rows.extend(collect_investing_rows(item))
+    return rows
+
+
+def first_present(row: dict[str, Any], names: tuple[str, ...]) -> Any:
+    lower_map = {str(key).lower(): value for key, value in row.items()}
+    for name in names:
+        key = name.lower()
+        if key in lower_map and lower_map[key] not in (None, ""):
+            return lower_map[key]
+    raise KeyError(names[0])
+
+
+def fetch_nasdaq100_from_investing() -> list[Bar]:
+    financial_id = os.environ.get("QQQ_INVESTING_FINANCIALDATA_ID", "20")
+    start_day = (date.today() - timedelta(days=900)).isoformat()
+    end_day = date.today().isoformat()
+    params = urllib.parse.urlencode(
+        {
+            "start-date": start_day,
+            "end-date": end_day,
+            "time-frame": "Daily",
+            "add-missing-rows": "false",
+        }
+    )
+    raw = http_get(
+        f"https://api.investing.com/api/financialdata/historical/{urllib.parse.quote(financial_id)}?{params}",
+        headers={
+            "Accept": "*/*",
+            "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+            "Domain-Id": "cn",
+            "Origin": "https://cn.investing.com",
+            "Referer": "https://cn.investing.com/",
+        },
+    )
+    data = json.loads(raw)
+    rows = collect_investing_rows(data)
+    bars = []
+    for row in rows:
+        try:
+            day = parse_market_date(first_present(row, ("date", "rowDate", "row_date", "priceDate", "time")))
+            close = parse_market_number(first_present(row, ("last_closeRaw", "last_close_raw", "close", "price", "last_close")))
+            volume = None
+            try:
+                volume = parse_market_number(first_present(row, ("volume", "vol")))
+            except (KeyError, ValueError):
+                pass
+            bars.append(Bar(day=day, close=close, volume=volume))
+        except (KeyError, TypeError, ValueError):
+            continue
+    bars.sort(key=lambda item: item.day)
+    return require_min_qqq_bars(bars, f"Investing financialdata/{financial_id}")
+
+
 def fetch_qqq_from_twelve_data() -> list[Bar]:
     api_key = os.environ.get("QQQ_TWELVE_DATA_API_KEY") or os.environ.get("TWELVE_DATA_API_KEY")
     if not api_key:
@@ -568,6 +655,66 @@ def fetch_qqq_from_tiingo() -> list[Bar]:
             continue
     bars.sort(key=lambda item: item.day)
     return require_min_qqq_bars(bars, "Tiingo")
+
+
+def fetch_qqq_from_nasdaq_charting() -> list[Bar]:
+    start_day = (date.today() - timedelta(days=900)).isoformat()
+    end_day = date.today().isoformat()
+    params = urllib.parse.urlencode({"symbol": "QQQ", "date": f"{start_day}~{end_day}"})
+    raw = http_get(
+        f"https://charting.nasdaq.com/data/charting/historical?{params}&",
+        headers={
+            "Accept": "*/*",
+            "Referer": "https://charting.nasdaq.com/dynamic/chart.html",
+            "Origin": "https://charting.nasdaq.com",
+        },
+    )
+    data = json.loads(raw)
+    market_data = data.get("marketData")
+    if not isinstance(market_data, list):
+        raise RuntimeError("Nasdaq charting 返回格式缺少 marketData")
+    bars = []
+    for row in market_data:
+        try:
+            volume_raw = row.get("Volume")
+            bars.append(
+                Bar(
+                    day=datetime.strptime(str(row["Date"])[:10], "%Y-%m-%d").date(),
+                    close=parse_market_number(row["Close"]),
+                    volume=parse_market_number(volume_raw) if volume_raw not in (None, "", "0") else None,
+                )
+            )
+        except (KeyError, TypeError, ValueError):
+            continue
+    bars.sort(key=lambda item: item.day)
+    return require_min_qqq_bars(bars, "Nasdaq charting")
+
+
+def fetch_nasdaq100_from_google_finance() -> list[Bar]:
+    symbol = os.environ.get("QQQ_GOOGLE_FINANCE_SYMBOL", "NDX:INDEXNASDAQ")
+    url_symbol = urllib.parse.quote(symbol, safe=":")
+    raw = http_get(
+        f"https://www.google.com/finance/beta/quote/{url_symbol}?hl=zh-CN",
+        headers={
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+        },
+    )
+    pairs = re.findall(r"\[\s*(1[5-9]\d{8,11})\s*,\s*([0-9]{3,8}(?:\.[0-9]+)?)\s*\]", raw)
+    by_day: dict[date, float] = {}
+    for ts_raw, close_raw in pairs:
+        try:
+            ts = int(ts_raw)
+            if ts > 10_000_000_000:
+                ts = ts // 1000
+            day = datetime.fromtimestamp(ts, timezone.utc).date()
+            if day > date.today() + timedelta(days=1) or day < date.today() - timedelta(days=1200):
+                continue
+            by_day[day] = float(close_raw)
+        except (OverflowError, OSError, ValueError):
+            continue
+    bars = [Bar(day=day, close=close) for day, close in sorted(by_day.items())]
+    return require_min_qqq_bars(bars, f"Google Finance {symbol}")
 
 
 def fetch_yahoo_bars_from_host(host: str, symbol: str, range_days: str = "2y") -> list[Bar]:
@@ -663,7 +810,15 @@ def fetch_qqq_bars(cache_path: Path | None = None) -> tuple[list[Bar], str]:
         fetchers.append(("twelvedata", fetch_qqq_from_twelve_data))
     if os.environ.get("QQQ_TIINGO_API_TOKEN") or os.environ.get("TIINGO_API_TOKEN"):
         fetchers.append(("tiingo", fetch_qqq_from_tiingo))
-    fetchers.extend((("stooq", fetch_qqq_from_stooq), ("yahoo", fetch_qqq_from_yahoo)))
+    fetchers.extend(
+        (
+            ("investing_nasdaq100", fetch_nasdaq100_from_investing),
+            ("google_finance_ndx", fetch_nasdaq100_from_google_finance),
+            ("nasdaq_charting", fetch_qqq_from_nasdaq_charting),
+            ("stooq", fetch_qqq_from_stooq),
+            ("yahoo", fetch_qqq_from_yahoo),
+        )
+    )
     for source, fetcher in fetchers:
         try:
             bars = fetcher()

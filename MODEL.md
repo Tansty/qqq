@@ -22,8 +22,11 @@
 
 1. Twelve Data time series API：需要 `QQQ_TWELVE_DATA_API_KEY`
 2. Tiingo daily prices API：需要 `QQQ_TIINGO_API_TOKEN`
-3. Stooq: `https://stooq.com/q/d/l/?s=qqq.us&i=d`
-4. Yahoo Finance chart API: `https://query1.finance.yahoo.com/v8/finance/chart/QQQ`
+3. Investing financialdata historical JSON endpoint：默认 `QQQ_INVESTING_FINANCIALDATA_ID=20`
+4. Google Finance 页面数据：默认 `QQQ_GOOGLE_FINANCE_SYMBOL=NDX:INDEXNASDAQ`
+5. Nasdaq charting historical JSON endpoint
+6. Stooq: `https://stooq.com/q/d/l/?s=qqq.us&i=d`
+7. Yahoo Finance chart API: `https://query1.finance.yahoo.com/v8/finance/chart/QQQ`
 
 如果前一个数据源失败，会自动尝试下一个。模型使用最新可得的 QQQ 日收盘价，不使用盘中价格。
 

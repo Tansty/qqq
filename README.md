@@ -109,10 +109,10 @@ QQQ_TIINGO_API_TOKEN=你的_Tiingo_API_Token
 两者都不是必须配置；配置后程序会优先使用，顺序为：
 
 ```text
-Twelve Data -> Tiingo -> Stooq -> Yahoo -> 本地缓存/最近报告
+Twelve Data -> Tiingo -> Investing financialdata -> Google Finance -> Nasdaq charting -> Stooq -> Yahoo -> 本地缓存/最近报告
 ```
 
-只配一个即可。Twelve Data 的 `time_series` 支持日线和 `outputsize` 参数；Tiingo 的 daily prices API 支持按日期区间拉取 QQQ 日线。免费额度和规则以服务商页面为准。
+只配一个即可。Twelve Data 的 `time_series` 支持日线和 `outputsize` 参数；Tiingo 的 daily prices API 支持按日期区间拉取 QQQ 日线。没有 API key 时，程序会尝试 Investing 页面背后的 `financialdata/historical` JSON 端点，默认 `QQQ_INVESTING_FINANCIALDATA_ID=20`，再尝试 Google Finance、Nasdaq 图表端点和公开源。免费额度、使用规则和网页抓取限制以服务商页面为准。
 
 ### 手动部署步骤
 
