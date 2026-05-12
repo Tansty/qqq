@@ -509,7 +509,14 @@ def parse_market_number(value: Any) -> float:
 
 
 def parse_market_date(value: Any) -> date:
+    if isinstance(value, (int, float)):
+        return datetime.fromtimestamp(float(value), timezone.utc).date()
     text = str(value).strip()
+    if text.endswith("Z") and "T" in text:
+        try:
+            return datetime.fromisoformat(text.replace("Z", "+00:00")).date()
+        except ValueError:
+            pass
     for fmt in ("%Y-%m-%d", "%m/%d/%Y", "%d/%m/%Y", "%b %d, %Y", "%B %d, %Y"):
         try:
             return datetime.strptime(text[:10] if fmt == "%Y-%m-%d" else text, fmt).date()
@@ -525,7 +532,7 @@ def collect_investing_rows(value: Any) -> list[dict[str, Any]]:
             rows.extend(collect_investing_rows(item))
     elif isinstance(value, dict):
         keys = {str(key).lower() for key in value}
-        has_date = bool(keys & {"date", "rowdate", "row_date", "pricedate", "time"})
+        has_date = bool(keys & {"date", "rowdate", "row_date", "rowdateraw", "rowdatetimestamp", "pricedate", "time"})
         has_close = bool(keys & {"close", "price", "last_close", "lastcloseraw", "last_close_raw"})
         if has_date and has_close:
             rows.append(value)
@@ -552,11 +559,13 @@ def parse_investing_payload(raw: str, financial_id: str) -> list[Bar]:
     bars = []
     for row in rows:
         try:
-            day = parse_market_date(first_present(row, ("date", "rowDate", "row_date", "priceDate", "time")))
+            day = parse_market_date(
+                first_present(row, ("rowDateTimestamp", "rowDateRaw", "date", "rowDate", "row_date", "priceDate", "time"))
+            )
             close = parse_market_number(first_present(row, ("last_closeRaw", "last_close_raw", "close", "price", "last_close")))
             volume = None
             try:
-                volume = parse_market_number(first_present(row, ("volume", "vol")))
+                volume = parse_market_number(first_present(row, ("volumeRaw", "volume", "vol")))
             except (KeyError, ValueError):
                 pass
             bars.append(Bar(day=day, close=close, volume=volume))
