@@ -140,9 +140,55 @@ install_compose_plugin_if_missing() {
   fi
 }
 
+buildx_version_ok() {
+  local version
+  version="$(docker_cmd buildx version 2>/dev/null | sed -n 's/.* v\([0-9][0-9.]*\).*/\1/p' | head -n 1)"
+  [ -n "$version" ] || return 1
+  python3 - "$version" <<'PY' >/dev/null 2>&1
+import sys
+
+version = tuple(int(part) for part in sys.argv[1].split(".")[:3])
+required = (0, 17, 0)
+while len(version) < 3:
+    version += (0,)
+raise SystemExit(0 if version >= required else 1)
+PY
+}
+
+install_buildx_plugin_if_needed() {
+  if buildx_version_ok; then
+    return
+  fi
+
+  install_package_if_missing curl curl
+  local arch
+  arch="$(uname -m)"
+  case "$arch" in
+    x86_64|amd64) arch="amd64" ;;
+    aarch64|arm64) arch="arm64" ;;
+    *)
+      echo "不支持自动安装 Docker Buildx 插件的架构: $arch" >&2
+      exit 1
+      ;;
+  esac
+
+  info "安装新版 Docker Buildx 插件"
+  run_as_root mkdir -p /usr/local/lib/docker/cli-plugins
+  run_as_root curl -fSL \
+    "https://github.com/docker/buildx/releases/latest/download/buildx-v0.21.2.linux-${arch}" \
+    -o /usr/local/lib/docker/cli-plugins/docker-buildx
+  run_as_root chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx
+
+  if ! buildx_version_ok; then
+    echo "Docker Buildx 插件安装失败，请检查网络或手动安装 buildx >= 0.17.0。" >&2
+    exit 1
+  fi
+}
+
 install_docker_if_missing() {
   if need_command docker && docker_usable; then
     install_compose_plugin_if_missing
+    install_buildx_plugin_if_needed
     return
   fi
 
@@ -179,6 +225,7 @@ install_docker_if_missing() {
   fi
 
   install_compose_plugin_if_missing
+  install_buildx_plugin_if_needed
 }
 
 install_cron_if_missing() {
@@ -254,7 +301,11 @@ EOF
 
 compose_up() {
   info "构建并启动 QQQ Advisor"
-  docker_cmd compose up -d --build
+  if ! docker_cmd compose up -d --build; then
+    info "compose build 失败，尝试使用 docker build 兜底"
+    docker_cmd build -t qqq-qqq-advisor .
+    docker_cmd compose up -d --no-build
+  fi
 }
 
 install_daily_job() {
