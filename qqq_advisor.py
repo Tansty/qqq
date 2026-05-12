@@ -493,6 +493,83 @@ def fetch_qqq_from_stooq() -> list[Bar]:
     return bars
 
 
+def require_min_qqq_bars(bars: list[Bar], source: str) -> list[Bar]:
+    if len(bars) < 220:
+        raise RuntimeError(f"{source} 返回的 QQQ 日线不足 220 条，无法计算长期指标")
+    return bars
+
+
+def fetch_qqq_from_twelve_data() -> list[Bar]:
+    api_key = os.environ.get("QQQ_TWELVE_DATA_API_KEY") or os.environ.get("TWELVE_DATA_API_KEY")
+    if not api_key:
+        raise RuntimeError("未配置 QQQ_TWELVE_DATA_API_KEY")
+    params = urllib.parse.urlencode(
+        {
+            "symbol": "QQQ",
+            "interval": "1day",
+            "outputsize": 600,
+            "order": "ASC",
+            "format": "JSON",
+            "apikey": api_key,
+        }
+    )
+    raw = http_get(f"https://api.twelvedata.com/time_series?{params}")
+    data = json.loads(raw)
+    if data.get("status") == "error":
+        raise RuntimeError(data.get("message") or "Twelve Data 返回错误")
+    values = data.get("values")
+    if not isinstance(values, list):
+        raise RuntimeError("Twelve Data 返回格式缺少 values")
+    bars = []
+    for row in values:
+        try:
+            volume_raw = row.get("volume")
+            bars.append(
+                Bar(
+                    day=datetime.strptime(str(row["datetime"])[:10], "%Y-%m-%d").date(),
+                    close=float(row["close"]),
+                    volume=float(volume_raw) if volume_raw not in (None, "", "0") else None,
+                )
+            )
+        except (KeyError, TypeError, ValueError):
+            continue
+    bars.sort(key=lambda item: item.day)
+    return require_min_qqq_bars(bars, "Twelve Data")
+
+
+def fetch_qqq_from_tiingo() -> list[Bar]:
+    token = os.environ.get("QQQ_TIINGO_API_TOKEN") or os.environ.get("TIINGO_API_TOKEN")
+    if not token:
+        raise RuntimeError("未配置 QQQ_TIINGO_API_TOKEN")
+    start_day = (date.today() - timedelta(days=900)).isoformat()
+    end_day = date.today().isoformat()
+    params = urllib.parse.urlencode({"startDate": start_day, "endDate": end_day, "format": "json"})
+    raw = http_get(
+        f"https://api.tiingo.com/tiingo/daily/QQQ/prices?{params}",
+        headers={"Authorization": f"Token {token}", "Content-Type": "application/json"},
+    )
+    data = json.loads(raw)
+    if isinstance(data, dict) and data.get("detail"):
+        raise RuntimeError(str(data["detail"]))
+    if not isinstance(data, list):
+        raise RuntimeError("Tiingo 返回格式不是列表")
+    bars = []
+    for row in data:
+        try:
+            volume_raw = row.get("volume")
+            bars.append(
+                Bar(
+                    day=datetime.strptime(str(row["date"])[:10], "%Y-%m-%d").date(),
+                    close=float(row.get("close") or row["adjClose"]),
+                    volume=float(volume_raw) if volume_raw not in (None, "", "0") else None,
+                )
+            )
+        except (KeyError, TypeError, ValueError):
+            continue
+    bars.sort(key=lambda item: item.day)
+    return require_min_qqq_bars(bars, "Tiingo")
+
+
 def fetch_yahoo_bars_from_host(host: str, symbol: str, range_days: str = "2y") -> list[Bar]:
     base = f"https://{host}/v8/finance/chart/{urllib.parse.quote(symbol)}"
     params = urllib.parse.urlencode({"range": range_days, "interval": "1d"})
@@ -523,9 +600,7 @@ def fetch_yahoo_bars(symbol: str, range_days: str = "2y") -> list[Bar]:
 
 def fetch_qqq_from_yahoo(range_days: str = "2y") -> list[Bar]:
     bars = fetch_yahoo_bars("QQQ", range_days=range_days)
-    if len(bars) < 220:
-        raise RuntimeError("Yahoo 返回的 QQQ 日线不足 220 条，无法计算长期指标")
-    return bars
+    return require_min_qqq_bars(bars, "Yahoo")
 
 
 def serialize_bars(bars: list[Bar]) -> list[dict[str, Any]]:
@@ -583,7 +658,13 @@ def load_qqq_bars_cache(path: Path) -> tuple[list[Bar], str] | None:
 
 def fetch_qqq_bars(cache_path: Path | None = None) -> tuple[list[Bar], str]:
     errors = []
-    for source, fetcher in (("stooq", fetch_qqq_from_stooq), ("yahoo", fetch_qqq_from_yahoo)):
+    fetchers = []
+    if os.environ.get("QQQ_TWELVE_DATA_API_KEY") or os.environ.get("TWELVE_DATA_API_KEY"):
+        fetchers.append(("twelvedata", fetch_qqq_from_twelve_data))
+    if os.environ.get("QQQ_TIINGO_API_TOKEN") or os.environ.get("TIINGO_API_TOKEN"):
+        fetchers.append(("tiingo", fetch_qqq_from_tiingo))
+    fetchers.extend((("stooq", fetch_qqq_from_stooq), ("yahoo", fetch_qqq_from_yahoo)))
+    for source, fetcher in fetchers:
         try:
             bars = fetcher()
             if cache_path is not None:

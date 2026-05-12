@@ -18,12 +18,14 @@
 
 ### 2.1 QQQ 行情
 
-程序优先使用公开日线数据源：
+程序优先使用配置了 API key 的日线数据源，然后再使用公开数据源：
 
-1. Stooq: `https://stooq.com/q/d/l/?s=qqq.us&i=d`
-2. Yahoo Finance chart API: `https://query1.finance.yahoo.com/v8/finance/chart/QQQ`
+1. Twelve Data time series API：需要 `QQQ_TWELVE_DATA_API_KEY`
+2. Tiingo daily prices API：需要 `QQQ_TIINGO_API_TOKEN`
+3. Stooq: `https://stooq.com/q/d/l/?s=qqq.us&i=d`
+4. Yahoo Finance chart API: `https://query1.finance.yahoo.com/v8/finance/chart/QQQ`
 
-如果第一个数据源失败，会自动尝试第二个。模型使用最新可得的 QQQ 日收盘价，不使用盘中价格。
+如果前一个数据源失败，会自动尝试下一个。模型使用最新可得的 QQQ 日收盘价，不使用盘中价格。
 
 QQQ 的成交量会从 Yahoo Finance chart API 一起读取，用于计算：
 

@@ -93,6 +93,23 @@ QQQ_DAILY_CRON="30 8 * * 2-6" \
 
 脚本会打印网页登录用户名和密码。请保存好密码，`.env` 不会提交到 Git。
 
+### 稳定行情数据源
+
+默认公开源是 Stooq 和 Yahoo。云服务器 IP 有时会遇到 Yahoo `429 Too Many Requests` 或 Stooq 返回异常内容。更稳的做法是在 `.env` 配置一个带 API key 的日线数据源：
+
+```bash
+QQQ_TWELVE_DATA_API_KEY=你的_Twelve_Data_API_Key
+QQQ_TIINGO_API_TOKEN=你的_Tiingo_API_Token
+```
+
+两者都不是必须配置；配置后程序会优先使用，顺序为：
+
+```text
+Twelve Data -> Tiingo -> Stooq -> Yahoo -> 本地缓存/最近报告
+```
+
+只配一个即可。Twelve Data 的 `time_series` 支持日线和 `outputsize` 参数；Tiingo 的 daily prices API 支持按日期区间拉取 QQQ 日线。免费额度和规则以服务商页面为准。
+
 ### 手动部署步骤
 
 如果不想用一键脚本，也可以按下面步骤手动操作。

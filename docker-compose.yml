@@ -15,5 +15,7 @@ services:
       QWEN_API_KEY: ${QWEN_API_KEY:-}
       QWEN_MODEL: ${QWEN_MODEL:-qwen3.6-plus-2026-04-02}
       QWEN_BASE_URL: ${QWEN_BASE_URL:-https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions}
+      QQQ_TWELVE_DATA_API_KEY: ${QQQ_TWELVE_DATA_API_KEY:-}
+      QQQ_TIINGO_API_TOKEN: ${QQQ_TIINGO_API_TOKEN:-}
     volumes:
       - ./storage:/app/storage
