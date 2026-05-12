@@ -89,6 +89,14 @@ QQQ_DAILY_CRON="30 8 * * 2-6" \
 
 脚本会打印网页登录用户名和密码。请保存好密码，`.env` 不会提交到 Git。
 
+常用运维命令：
+
+```bash
+./restart.sh   # 重启容器
+./stop.sh      # 关闭容器，但保留数据和镜像
+./deploy.sh    # 安装/更新并启动容器
+```
+
 ### 稳定行情数据源
 
 默认公开源是 Stooq 和 Yahoo。云服务器 IP 有时会遇到 Yahoo `429 Too Many Requests` 或 Stooq 返回异常内容。更稳的做法是在 `.env` 配置一个带 API key 的日线数据源：
