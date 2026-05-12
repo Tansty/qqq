@@ -1,0 +1,49 @@
+{
+  "profile": {
+    "total_investable_cny": 100000,
+    "risk_level": "balanced",
+    "horizon_years": 3,
+    "max_acceptable_loss_pct": 20
+  },
+  "data_dir": "data",
+  "portfolio": {
+    "current_nasdaq_position_cny": 0,
+    "nasdaq_fund_holdings": []
+  },
+  "rules": {
+    "min_trade_cny": 10,
+    "alipay_only": true
+  },
+  "funds": [
+    {
+      "code": "270042",
+      "name": "广发纳斯达克100ETF联接人民币(QDII)A",
+      "style": "long_term",
+      "preferred": true
+    },
+    {
+      "code": "006479",
+      "name": "广发纳斯达克100ETF联接人民币(QDII)C",
+      "style": "short_to_mid_term",
+      "preferred": true
+    },
+    {
+      "code": "161130",
+      "name": "易方达纳斯达克100ETF联接(QDII-LOF)A",
+      "style": "long_term",
+      "preferred": true
+    },
+    {
+      "code": "012870",
+      "name": "易方达纳斯达克100ETF联接(QDII-LOF)C",
+      "style": "short_to_mid_term",
+      "preferred": false
+    },
+    {
+      "code": "019547",
+      "name": "招商纳斯达克100ETF联接(QDII)A",
+      "style": "candidate",
+      "preferred": false
+    }
+  ]
+}

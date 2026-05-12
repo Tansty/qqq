@@ -1,0 +1,19 @@
+services:
+  qqq-advisor:
+    build: .
+    container_name: qqq-advisor
+    restart: unless-stopped
+    ports:
+      - "${QQQ_ADVISOR_PORT:-8765}:8765"
+    environment:
+      QQQ_ADVISOR_CONFIG: /app/storage/config.json
+      QQQ_ADVISOR_DATA_DIR: /app/storage/data
+      QQQ_ADVISOR_HOST: 0.0.0.0
+      QQQ_ADVISOR_PORT: 8765
+      QQQ_ADVISOR_USERNAME: ${QQQ_ADVISOR_USERNAME:-advisor}
+      QQQ_ADVISOR_PASSWORD: ${QQQ_ADVISOR_PASSWORD:?Set QQQ_ADVISOR_PASSWORD in .env before deploying}
+      QWEN_API_KEY: ${QWEN_API_KEY:-}
+      QWEN_MODEL: ${QWEN_MODEL:-qwen3.6-plus-2026-04-02}
+      QWEN_BASE_URL: ${QWEN_BASE_URL:-https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions}
+    volumes:
+      - ./storage:/app/storage

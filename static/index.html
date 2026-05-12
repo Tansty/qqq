@@ -1,0 +1,1155 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>QQQ 投资建议面板</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f6f7f9;
+        --ink: #18212f;
+        --muted: #667085;
+        --line: #d9dee7;
+        --panel: #ffffff;
+        --panel-2: #eef6f3;
+        --accent: #0f766e;
+        --accent-2: #2563eb;
+        --warn: #b45309;
+        --danger: #b42318;
+        --ok: #047857;
+        --shadow: 0 16px 45px rgba(24, 33, 47, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      }
+
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+
+      .app {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: minmax(320px, 400px) minmax(0, 1fr);
+      }
+
+      .sidebar {
+        background: #fff;
+        border-right: 1px solid var(--line);
+        padding: 26px;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow: auto;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
+      .mark {
+        width: 42px;
+        height: 42px;
+        border-radius: 8px;
+        background:
+          linear-gradient(135deg, rgba(15, 118, 110, 0.94), rgba(37, 99, 235, 0.92)),
+          #0f766e;
+        color: #fff;
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+      }
+
+      h1 {
+        font-size: 22px;
+        line-height: 1.1;
+        margin: 0;
+        letter-spacing: 0;
+      }
+
+      .subtitle {
+        color: var(--muted);
+        margin: 4px 0 0;
+        font-size: 13px;
+      }
+
+      form {
+        display: grid;
+        gap: 18px;
+      }
+
+      .field {
+        display: grid;
+        gap: 8px;
+      }
+
+      label,
+      legend {
+        color: #354052;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        background: #fff;
+        color: var(--ink);
+        outline: none;
+      }
+
+      input,
+      select {
+        height: 42px;
+        padding: 0 12px;
+      }
+
+      textarea {
+        min-height: 116px;
+        resize: vertical;
+        padding: 10px 12px;
+        line-height: 1.45;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 12px;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
+      }
+
+      .segmented {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+        background: #fff;
+      }
+
+      .segmented input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .segmented label {
+        height: 40px;
+        display: grid;
+        place-items: center;
+        border-right: 1px solid var(--line);
+        cursor: pointer;
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      .segmented label:last-child {
+        border-right: 0;
+      }
+
+      .segmented input:checked + label {
+        background: #e7f5f1;
+        color: var(--accent);
+      }
+
+      .actions {
+        display: grid;
+        gap: 10px;
+        margin-top: 4px;
+      }
+
+      .primary {
+        height: 44px;
+        border: 0;
+        border-radius: 8px;
+        color: #fff;
+        background: var(--accent);
+        cursor: pointer;
+        font-weight: 800;
+      }
+
+      .primary:disabled {
+        opacity: 0.65;
+        cursor: progress;
+      }
+
+      .secondary {
+        height: 40px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        color: var(--ink);
+        cursor: pointer;
+        font-weight: 700;
+      }
+
+      .note {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.55;
+        margin-top: 18px;
+        border-top: 1px solid var(--line);
+        padding-top: 16px;
+      }
+
+      main {
+        padding: 28px;
+        overflow: hidden;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 18px;
+        margin-bottom: 18px;
+      }
+
+      .topbar h2 {
+        font-size: 26px;
+        margin: 0 0 6px;
+      }
+
+      .status {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        min-height: 32px;
+        padding: 0 12px;
+        border-radius: 999px;
+        background: #fff;
+        border: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 13px;
+        white-space: nowrap;
+      }
+
+      .hero {
+        background:
+          linear-gradient(115deg, rgba(255, 255, 255, 0.98), rgba(238, 246, 243, 0.96)),
+          var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        padding: 24px;
+        margin-bottom: 18px;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: minmax(240px, 0.9fr) minmax(300px, 1.1fr);
+        gap: 22px;
+        align-items: center;
+      }
+
+      .decision-label {
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .decision {
+        font-size: clamp(32px, 5vw, 58px);
+        line-height: 1;
+        font-weight: 900;
+        margin: 8px 0 12px;
+      }
+
+      .amount {
+        display: flex;
+        gap: 12px;
+        align-items: baseline;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+      }
+
+      .amount strong {
+        font-size: 28px;
+      }
+
+      .reason {
+        color: #354052;
+        line-height: 1.6;
+        margin: 0;
+      }
+
+      .score-wrap {
+        display: grid;
+        gap: 12px;
+      }
+
+      .score-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .meter {
+        height: 16px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: #e9edf3;
+        overflow: hidden;
+      }
+
+      .meter > div {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--danger), var(--warn), var(--ok));
+        transition: width 300ms ease;
+      }
+
+      canvas {
+        width: 100%;
+        height: 170px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fbfcfd;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(150px, 1fr));
+        gap: 14px;
+        margin-bottom: 18px;
+      }
+
+      .metric,
+      .section {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+
+      .metric {
+        padding: 16px;
+      }
+
+      .metric span {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .metric strong {
+        display: block;
+        font-size: 23px;
+        margin-top: 8px;
+      }
+
+      .sections {
+        display: grid;
+        grid-template-columns: minmax(300px, 1.1fr) minmax(280px, 0.9fr);
+        gap: 18px;
+        margin-bottom: 18px;
+      }
+
+      .section {
+        padding: 18px;
+      }
+
+      .section h3 {
+        margin: 0 0 14px;
+        font-size: 18px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        text-align: left;
+        border-bottom: 1px solid var(--line);
+        padding: 11px 8px;
+        font-size: 13px;
+        vertical-align: top;
+      }
+
+      th {
+        color: var(--muted);
+        font-weight: 800;
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .checks {
+        display: grid;
+        gap: 10px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .checks li {
+        border-left: 3px solid var(--accent-2);
+        padding: 8px 0 8px 12px;
+        color: #354052;
+        line-height: 1.45;
+        font-size: 13px;
+      }
+
+      .review-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(130px, 1fr));
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+
+      .review-box {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 12px;
+        background: #fbfcfd;
+      }
+
+      .review-box span {
+        display: block;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .review-box strong {
+        display: block;
+        margin-top: 6px;
+        font-size: 20px;
+      }
+
+      .hint-list {
+        margin: 0 0 14px;
+        padding-left: 18px;
+        color: #354052;
+        line-height: 1.5;
+        font-size: 13px;
+      }
+
+      .empty {
+        min-height: 420px;
+        display: grid;
+        place-items: center;
+        color: var(--muted);
+        border: 1px dashed var(--line);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.72);
+        text-align: center;
+        padding: 32px;
+      }
+
+      .error {
+        display: none;
+        margin-bottom: 16px;
+        background: #fff1f0;
+        border: 1px solid #fecdca;
+        color: var(--danger);
+        border-radius: 8px;
+        padding: 12px 14px;
+        font-size: 13px;
+      }
+
+      @media (max-width: 980px) {
+        .app {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          position: static;
+          height: auto;
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
+
+        .hero-grid,
+        .sections {
+          grid-template-columns: 1fr;
+        }
+
+        .grid {
+          grid-template-columns: repeat(2, minmax(140px, 1fr));
+        }
+      }
+
+      @media (max-width: 560px) {
+        main,
+        .sidebar {
+          padding: 18px;
+        }
+
+        .topbar {
+          display: grid;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        th,
+        td {
+          padding: 10px 4px;
+          font-size: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="mark">Q</div>
+          <div>
+            <h1>QQQ 投资面板</h1>
+            <p class="subtitle">纳斯达克100基金分批买入助手</p>
+          </div>
+        </div>
+
+        <form id="advisor-form">
+          <div class="field">
+            <label for="total">可投资总金额（元）</label>
+            <input id="total" name="total" type="number" min="0" step="100" required />
+          </div>
+
+          <div class="field">
+            <label for="position">当前纳指基金持仓（元）</label>
+            <input id="position" name="position" type="number" min="0" step="100" required />
+          </div>
+
+          <div class="field">
+            <label for="holdings">持仓纳指基金 JSON</label>
+            <textarea id="holdings" name="holdings" spellcheck="false" placeholder='[{"code":"270042","name":"广发纳斯达克100A","amount_cny":10000,"shares":0,"cost_nav":0}]'></textarea>
+          </div>
+
+          <fieldset class="field" style="border:0; padding:0; margin:0">
+            <legend>风险偏好</legend>
+            <div class="segmented">
+              <input id="risk-conservative" name="risk" type="radio" value="conservative" />
+              <label for="risk-conservative">保守</label>
+              <input id="risk-balanced" name="risk" type="radio" value="balanced" />
+              <label for="risk-balanced">稳健</label>
+              <input id="risk-aggressive" name="risk" type="radio" value="aggressive" />
+              <label for="risk-aggressive">进取</label>
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label for="horizon">投资期限（年）</label>
+            <input id="horizon" name="horizon" type="number" min="0.5" max="30" step="0.5" required />
+          </div>
+
+          <div class="field">
+            <label for="loss">最大可接受亏损（%）</label>
+            <input id="loss" name="loss" type="number" min="1" max="80" step="1" required />
+          </div>
+
+          <div class="field">
+            <label for="minTrade">单次最低买入（元）</label>
+            <input id="minTrade" name="minTrade" type="number" min="1" step="1" required />
+          </div>
+
+          <div class="actions">
+            <button class="primary" id="runBtn" type="submit">获取今日建议</button>
+            <button class="secondary" id="saveBtn" type="button">保存输入</button>
+          </div>
+        </form>
+
+        <p class="note">
+          页面会保存你的输入到本地 <code>config.json</code>。基金是否可申购、是否限购、费率和到账时间以支付宝下单页为准。
+        </p>
+      </aside>
+
+      <main>
+        <div class="topbar">
+          <div>
+            <h2>今日投资建议</h2>
+            <div class="status" id="status">等待输入后获取数据</div>
+          </div>
+          <div class="pill" id="updated">未生成</div>
+        </div>
+
+        <div class="error" id="error"></div>
+
+        <div id="empty" class="empty">
+          <div>
+            <strong>输入你的资金和风险偏好</strong>
+            <p>点击“获取今日建议”后，这里会展示买入金额、市场指标和支付宝候选基金。</p>
+          </div>
+        </div>
+
+        <div id="dashboard" style="display: none">
+          <section class="hero">
+            <div class="hero-grid">
+              <div>
+                <div class="decision-label">模型动作</div>
+                <div class="decision" id="decision">-</div>
+                <div class="amount">
+                  <span>本次建议买入</span>
+                  <strong id="buyNow">-</strong>
+                </div>
+                <div class="amount">
+                  <span>本次建议卖出</span>
+                  <strong id="sellNow">-</strong>
+                </div>
+                <p class="reason" id="reason">-</p>
+              </div>
+
+              <div class="score-wrap">
+                <div class="score-row">
+                  <span>入场评分</span>
+                  <strong id="scoreText">-</strong>
+                </div>
+                <div class="meter"><div id="scoreBar"></div></div>
+                <canvas id="marketCanvas" width="680" height="260" aria-label="市场指标图"></canvas>
+              </div>
+            </div>
+          </section>
+
+          <section class="grid">
+            <div class="metric"><span>QQQ 收盘</span><strong id="qqqClose">-</strong></div>
+            <div class="metric"><span>RSI14</span><strong id="rsi">-</strong></div>
+            <div class="metric"><span>近一年高点回撤</span><strong id="drawdown">-</strong></div>
+            <div class="metric"><span>目标纳指仓位</span><strong id="targetWeight">-</strong></div>
+            <div class="metric"><span>支付宝估算确认日</span><strong id="navDate">-</strong></div>
+          </section>
+
+          <section class="section" style="margin-bottom: 18px">
+            <h3>纳指/QQQ 指数曲线</h3>
+            <canvas id="indexCurveCanvas" width="980" height="280" aria-label="纳指曲线图"></canvas>
+          </section>
+
+          <div class="sections">
+            <section class="section">
+              <h3>我的纳指基金持仓</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>代码</th>
+                    <th>名称</th>
+                    <th>当前净值</th>
+                    <th>估算市值</th>
+                    <th>盈亏</th>
+                  </tr>
+                </thead>
+                <tbody id="holdingRows"></tbody>
+              </table>
+            </section>
+
+            <section class="section">
+              <h3>支付宝候选基金</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>代码</th>
+                    <th>名称</th>
+                    <th>净值/估值</th>
+                    <th>时间</th>
+                  </tr>
+                </thead>
+                <tbody id="fundRows"></tbody>
+              </table>
+            </section>
+
+            <section class="section">
+              <h3>下单前检查</h3>
+              <ul class="checks" id="checks"></ul>
+            </section>
+          </div>
+
+          <section class="section">
+            <h3>上下文调整</h3>
+            <ul class="checks" id="contextAdjustments"></ul>
+          </section>
+
+          <section class="section" style="margin-top: 18px">
+            <h3>支付宝手动交易单</h3>
+            <ul class="checks" id="manualOrder"></ul>
+            <table>
+              <thead>
+                <tr>
+                  <th>日期</th>
+                  <th>基金</th>
+                  <th>类型</th>
+                  <th>金额</th>
+                  <th>状态</th>
+                </tr>
+              </thead>
+              <tbody id="manualOrderRows"></tbody>
+            </table>
+          </section>
+
+          <section class="section">
+            <h3>模型复盘</h3>
+            <div class="review-grid">
+              <div class="review-box"><span>1交易日准确率</span><strong id="acc1">-</strong></div>
+              <div class="review-box"><span>5交易日准确率</span><strong id="acc5">-</strong></div>
+              <div class="review-box"><span>20交易日准确率</span><strong id="acc20">-</strong></div>
+            </div>
+            <ul class="hint-list" id="hints"></ul>
+            <table>
+              <thead>
+                <tr>
+                  <th>日期</th>
+                  <th>动作</th>
+                  <th>评分</th>
+                  <th>1日</th>
+                  <th>5日</th>
+                  <th>20日</th>
+                </tr>
+              </thead>
+              <tbody id="historyRows"></tbody>
+            </table>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      const form = document.querySelector("#advisor-form");
+      const runBtn = document.querySelector("#runBtn");
+      const saveBtn = document.querySelector("#saveBtn");
+      const errorBox = document.querySelector("#error");
+      const empty = document.querySelector("#empty");
+      const dashboard = document.querySelector("#dashboard");
+
+      const fmtCny = new Intl.NumberFormat("zh-CN", {
+        style: "currency",
+        currency: "CNY",
+        maximumFractionDigits: 0,
+      });
+
+      function formPayload() {
+        const data = new FormData(form);
+        let holdings = [];
+        const holdingsText = String(data.get("holdings") || "").trim();
+        if (holdingsText) {
+          try {
+            holdings = JSON.parse(holdingsText);
+            if (!Array.isArray(holdings)) throw new Error("持仓必须是数组");
+          } catch (error) {
+            throw new Error(`持仓基金 JSON 格式不正确：${error.message}`);
+          }
+        }
+        return {
+          profile: {
+            total_investable_cny: Number(data.get("total")),
+            risk_level: data.get("risk"),
+            horizon_years: Number(data.get("horizon")),
+            max_acceptable_loss_pct: Number(data.get("loss")),
+          },
+          portfolio: {
+            current_nasdaq_position_cny: Number(data.get("position")),
+            nasdaq_fund_holdings: holdings,
+          },
+          rules: {
+            min_trade_cny: Number(data.get("minTrade")),
+          },
+        };
+      }
+
+      async function requestJson(url, options = {}) {
+        const response = await fetch(url, {
+          headers: { "Content-Type": "application/json" },
+          ...options,
+        });
+        const payload = await response.json();
+        if (!response.ok) {
+          throw new Error(payload.error || "请求失败");
+        }
+        return payload;
+      }
+
+      function showError(message) {
+        errorBox.style.display = "block";
+        errorBox.textContent = message;
+      }
+
+      function clearError() {
+        errorBox.style.display = "none";
+        errorBox.textContent = "";
+      }
+
+      function setBusy(isBusy) {
+        runBtn.disabled = isBusy;
+        runBtn.textContent = isBusy ? "正在获取数据..." : "获取今日建议";
+      }
+
+      function fillConfig(config) {
+        const profile = config.profile || {};
+        const portfolio = config.portfolio || {};
+        const rules = config.rules || {};
+        document.querySelector("#total").value = profile.total_investable_cny ?? 100000;
+        document.querySelector("#position").value = portfolio.current_nasdaq_position_cny ?? 0;
+        document.querySelector("#holdings").value = JSON.stringify(portfolio.nasdaq_fund_holdings || [], null, 2);
+        document.querySelector("#horizon").value = profile.horizon_years ?? 3;
+        document.querySelector("#loss").value = profile.max_acceptable_loss_pct ?? 20;
+        document.querySelector("#minTrade").value = rules.min_trade_cny ?? 10;
+        const risk = profile.risk_level || "balanced";
+        const riskInput = document.querySelector(`input[name="risk"][value="${risk}"]`);
+        if (riskInput) riskInput.checked = true;
+      }
+
+      function actionColor(action) {
+        if (action === "加仓" || action === "正常买入") return "#047857";
+        if (action === "小额试探") return "#b45309";
+        return "#b42318";
+      }
+
+      function renderChart(market) {
+        const canvas = document.querySelector("#marketCanvas");
+        const ctx = canvas.getContext("2d");
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = "#fbfcfd";
+        ctx.fillRect(0, 0, w, h);
+
+        const bars = [
+          ["收盘", market.close],
+          ["MA20", market.ma20],
+          ["MA60", market.ma60],
+          ["MA200", market.ma200],
+        ];
+        const max = Math.max(...bars.map((item) => item[1]));
+        const min = Math.min(...bars.map((item) => item[1]));
+        const span = Math.max(max - min, 1);
+        const left = 58;
+        const top = 28;
+        const chartW = w - 90;
+        const chartH = h - 74;
+
+        ctx.strokeStyle = "#d9dee7";
+        ctx.lineWidth = 1;
+        for (let i = 0; i <= 3; i += 1) {
+          const y = top + (chartH / 3) * i;
+          ctx.beginPath();
+          ctx.moveTo(left, y);
+          ctx.lineTo(left + chartW, y);
+          ctx.stroke();
+        }
+
+        const barW = Math.min(76, chartW / bars.length - 24);
+        bars.forEach(([label, value], index) => {
+          const x = left + 26 + index * (chartW / bars.length);
+          const bh = ((value - min) / span) * (chartH * 0.72) + chartH * 0.16;
+          const y = top + chartH - bh;
+          ctx.fillStyle = index === 0 ? "#0f766e" : "#2563eb";
+          ctx.fillRect(x, y, barW, bh);
+          ctx.fillStyle = "#354052";
+          ctx.font = "22px system-ui";
+          ctx.fillText(String(Math.round(value)), x - 2, y - 8);
+          ctx.fillStyle = "#667085";
+          ctx.font = "20px system-ui";
+          ctx.fillText(label, x + 2, top + chartH + 30);
+        });
+      }
+
+      function renderIndexCurve(history) {
+        const canvas = document.querySelector("#indexCurveCanvas");
+        const ctx = canvas.getContext("2d");
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = "#fbfcfd";
+        ctx.fillRect(0, 0, w, h);
+        if (!history || history.length < 2) return;
+
+        const values = history.map((item) => item.close);
+        const max = Math.max(...values);
+        const min = Math.min(...values);
+        const span = Math.max(max - min, 1);
+        const left = 58;
+        const right = 24;
+        const top = 24;
+        const bottom = 44;
+        const chartW = w - left - right;
+        const chartH = h - top - bottom;
+
+        ctx.strokeStyle = "#d9dee7";
+        ctx.lineWidth = 1;
+        for (let i = 0; i <= 4; i += 1) {
+          const y = top + (chartH / 4) * i;
+          ctx.beginPath();
+          ctx.moveTo(left, y);
+          ctx.lineTo(left + chartW, y);
+          ctx.stroke();
+          ctx.fillStyle = "#667085";
+          ctx.font = "18px system-ui";
+          const label = Math.round(max - (span / 4) * i);
+          ctx.fillText(String(label), 8, y + 6);
+        }
+
+        ctx.strokeStyle = "#0f766e";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        history.forEach((item, index) => {
+          const x = left + (chartW * index) / (history.length - 1);
+          const y = top + chartH - ((item.close - min) / span) * chartH;
+          if (index === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+
+        const first = history[0];
+        const last = history[history.length - 1];
+        const change = ((last.close / first.close - 1) * 100).toFixed(2);
+        ctx.fillStyle = "#354052";
+        ctx.font = "20px system-ui";
+        ctx.fillText(`${first.date} → ${last.date}    ${change >= 0 ? "+" : ""}${change}%`, left, h - 14);
+      }
+
+      function renderReport(report) {
+        const market = report.market;
+        const decision = report.decision;
+        empty.style.display = "none";
+        dashboard.style.display = "block";
+
+        document.querySelector("#status").textContent =
+          `QQQ ${market.date} 收盘，数据源 ${market.source}`;
+        document.querySelector("#updated").textContent = report.generated_at;
+        document.querySelector("#decision").textContent = decision.action;
+        document.querySelector("#decision").style.color = actionColor(decision.action);
+        document.querySelector("#buyNow").textContent = fmtCny.format(decision.buy_now_cny);
+        document.querySelector("#sellNow").textContent = fmtCny.format(decision.sell_now_cny || 0);
+        document.querySelector("#reason").textContent = decision.reason;
+        document.querySelector("#scoreText").textContent = `${market.score}/100`;
+        document.querySelector("#scoreBar").style.width = `${market.score}%`;
+        document.querySelector("#qqqClose").textContent = market.close;
+        document.querySelector("#rsi").textContent = market.rsi14;
+        document.querySelector("#drawdown").textContent = `${market.drawdown_from_252d_high_pct}%`;
+        document.querySelector("#targetWeight").textContent =
+          `${report.target_nasdaq_weight_pct}%`;
+        document.querySelector("#navDate").textContent =
+          report.execution_plan?.estimated_nav_date || "-";
+
+        const rows = document.querySelector("#fundRows");
+        rows.innerHTML = "";
+        report.fund_candidates.forEach((fund) => {
+          const tr = document.createElement("tr");
+          const nav = fund.nav ?? "N/A";
+          const estimate = fund.estimate ?? "N/A";
+          tr.innerHTML = `
+            <td>${fund.code}</td>
+            <td>${fund.name}</td>
+            <td>${nav} / ${estimate}</td>
+            <td>${fund.estimate_time || fund.nav_date || "N/A"}</td>
+          `;
+          rows.appendChild(tr);
+        });
+
+        const holdingRows = document.querySelector("#holdingRows");
+        holdingRows.innerHTML = "";
+        const holdings = report.holdings || [];
+        if (holdings.length === 0) {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td colspan="5">暂无持仓；可在左侧输入持仓基金 JSON。</td>`;
+          holdingRows.appendChild(tr);
+        } else {
+          holdings.forEach((holding) => {
+            const pnl = holding.pnl_cny === null || holding.pnl_cny === undefined
+              ? "-"
+              : `${fmtCny.format(holding.pnl_cny)} / ${holding.pnl_pct}%`;
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${holding.code}</td>
+              <td>${holding.name}</td>
+              <td>${holding.nav ?? "N/A"}</td>
+              <td>${fmtCny.format(holding.market_value_cny || 0)}</td>
+              <td>${pnl}</td>
+            `;
+            holdingRows.appendChild(tr);
+          });
+        }
+
+        const checks = document.querySelector("#checks");
+        checks.innerHTML = "";
+        report.manual_checks_before_order.forEach((item) => {
+          const li = document.createElement("li");
+          li.textContent = item;
+          checks.appendChild(li);
+        });
+
+        const adjustments = document.querySelector("#contextAdjustments");
+        adjustments.innerHTML = "";
+        const items = market.context_adjustments || [];
+        if (items.length === 0) {
+          const li = document.createElement("li");
+          li.textContent = "暂无宏观或T+1滞后额外扣分。";
+          adjustments.appendChild(li);
+        } else {
+          items.forEach((item) => {
+            const li = document.createElement("li");
+            li.textContent = `${item.summary}（${item.points}分）`;
+            adjustments.appendChild(li);
+          });
+        }
+
+        const manualOrder = document.querySelector("#manualOrder");
+        manualOrder.innerHTML = "";
+        const order = report.manual_order || {};
+        const orderLine = document.createElement("li");
+        if (order.status === "pending_manual_confirmation") {
+          const verb = order.type === "sell" ? "赎回/卖出" : "申购/买入";
+          orderLine.textContent =
+            `待手动确认：在支付宝${verb} ${order.fund_code} ${order.fund_name}，金额 ${fmtCny.format(order.amount_cny)}，估算确认日 ${order.estimated_nav_date}。`;
+        } else {
+          orderLine.textContent = order.message || "今日没有生成手动交易单。";
+        }
+        manualOrder.appendChild(orderLine);
+        const safetyLine = document.createElement("li");
+        safetyLine.textContent = "系统不会自动提交支付宝交易；你需要手动核对并确认。";
+        manualOrder.appendChild(safetyLine);
+
+        renderChart(market);
+        renderIndexCurve(market.history || []);
+      }
+
+      async function refreshManualOrders() {
+        try {
+          const payload = await requestJson("/api/manual-orders");
+          const rows = document.querySelector("#manualOrderRows");
+          rows.innerHTML = "";
+          if (!payload.items || payload.items.length === 0) {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `<td colspan="5">暂无待确认交易单。</td>`;
+            rows.appendChild(tr);
+            return;
+          }
+          payload.items.slice(0, 10).forEach((order) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${order.order_date}</td>
+              <td>${order.fund_code} ${order.fund_name}</td>
+              <td>${order.type}</td>
+              <td>${fmtCny.format(order.amount_cny || 0)}</td>
+              <td>${order.status}</td>
+            `;
+            rows.appendChild(tr);
+          });
+        } catch (error) {
+          showError(error.message);
+        }
+      }
+
+      function outcomeText(outcome) {
+        if (!outcome) return "待观察";
+        const sign = outcome.return_pct > 0 ? "+" : "";
+        return `${sign}${outcome.return_pct}% · ${outcome.label}`;
+      }
+
+      function accuracyText(value) {
+        return value === null || value === undefined ? "样本不足" : `${value}%`;
+      }
+
+      async function refreshReview() {
+        try {
+          const review = await requestJson("/api/evaluation");
+          const horizons = review.summary.horizons || {};
+          document.querySelector("#acc1").textContent = accuracyText(horizons["1d"]?.accuracy_pct);
+          document.querySelector("#acc5").textContent = accuracyText(horizons["5d"]?.accuracy_pct);
+          document.querySelector("#acc20").textContent = accuracyText(horizons["20d"]?.accuracy_pct);
+
+          const hints = document.querySelector("#hints");
+          hints.innerHTML = "";
+          review.optimization_hints.forEach((hint) => {
+            const li = document.createElement("li");
+            li.textContent = hint;
+            hints.appendChild(li);
+          });
+
+          const rows = document.querySelector("#historyRows");
+          rows.innerHTML = "";
+          review.items.slice(0, 15).forEach((item) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${item.market_date}</td>
+              <td>${item.action}</td>
+              <td>${item.score}</td>
+              <td>${outcomeText(item.outcomes["1d"])}</td>
+              <td>${outcomeText(item.outcomes["5d"])}</td>
+              <td>${outcomeText(item.outcomes["20d"])}</td>
+            `;
+            rows.appendChild(tr);
+          });
+        } catch (error) {
+          showError(error.message);
+        }
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        clearError();
+        setBusy(true);
+        try {
+          const report = await requestJson("/api/recommendation", {
+            method: "POST",
+            body: JSON.stringify(formPayload()),
+          });
+          renderReport(report);
+          await refreshReview();
+          await refreshManualOrders();
+        } catch (error) {
+          showError(error.message);
+        } finally {
+          setBusy(false);
+        }
+      });
+
+      saveBtn.addEventListener("click", async () => {
+        clearError();
+        try {
+          await requestJson("/api/config", {
+            method: "POST",
+            body: JSON.stringify(formPayload()),
+          });
+          document.querySelector("#status").textContent = "输入已保存";
+        } catch (error) {
+          showError(error.message);
+        }
+      });
+
+      async function boot() {
+        try {
+          fillConfig(await requestJson("/api/config"));
+          const latest = await requestJson("/api/latest-report");
+          if (latest.report) renderReport(latest.report);
+          await refreshReview();
+          await refreshManualOrders();
+        } catch (error) {
+          showError(error.message);
+        }
+      }
+
+      boot();
+    </script>
+  </body>
+</html>
