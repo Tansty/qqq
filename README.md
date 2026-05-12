@@ -112,7 +112,7 @@ QQQ_TIINGO_API_TOKEN=你的_Tiingo_API_Token
 Twelve Data -> Tiingo -> Investing financialdata -> Google Finance -> Nasdaq charting -> Stooq -> Yahoo -> 本地缓存/最近报告
 ```
 
-只配一个即可。Twelve Data 的 `time_series` 支持日线和 `outputsize` 参数；Tiingo 的 daily prices API 支持按日期区间拉取 QQQ 日线。没有 API key 时，程序会尝试 Investing 页面背后的 `financialdata/historical` JSON 端点，默认 `QQQ_INVESTING_FINANCIALDATA_ID=20`，再尝试 Google Finance、Nasdaq 图表端点和公开源。免费额度、使用规则和网页抓取限制以服务商页面为准。
+只配一个即可。Twelve Data 的 `time_series` 支持日线和 `outputsize` 参数；Tiingo 的 daily prices API 支持按日期区间拉取 QQQ 日线。没有 API key 时，程序会尝试 Investing 页面背后的 `financialdata/historical` JSON 端点，默认 `QQQ_INVESTING_FINANCIALDATA_ID=20`，再尝试 Google Finance、Nasdaq 图表端点和公开源。行情最少需要 100 条日线；如果不足 200 条，长期均线会用现有最长窗口近似。免费额度、使用规则和网页抓取限制以服务商页面为准。
 
 ### 手动部署步骤
 
@@ -537,7 +537,7 @@ python3 /Users/dz0401012/Desktop/pythonProject/qqq/qqq_advisor.py run --config /
 简要逻辑：
 
 1. 获取 QQQ 最新日线。
-2. 计算 MA20、MA60、MA200、RSI14、近一年高点回撤、20日波动率。
+2. 计算 MA20、MA60、MA200 或可用最长均线、RSI14、近一年/可用窗口高点回撤、20日波动率。
 3. 从 50 分开始，根据 `data/model_params.json` 里的因子和权重加减分。
 4. 将评分映射成 `暂不买入`、`小额试探`、`正常买入`、`加仓`。
 5. 根据你的总资产、风险偏好、投资期限和当前持仓，计算目标纳指仓位和本次建议买入金额。

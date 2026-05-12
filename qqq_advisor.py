@@ -71,6 +71,7 @@ MANUAL_ORDERS_FILE = "manual_orders.json"
 ACTUAL_TRADES_FILE = "actual_trades.json"
 EVALUATION_HORIZONS = [1, 5, 20]
 QQQ_BARS_CACHE_FILE = "qqq_bars_cache.json"
+MIN_QQQ_BARS = 100
 
 
 DEFAULT_MODEL_PARAMS = {
@@ -489,14 +490,12 @@ def fetch_qqq_from_stooq() -> list[Bar]:
             bars.append(Bar(day=datetime.strptime(row["Date"], "%Y-%m-%d").date(), close=float(row["Close"]), volume=volume))
         except ValueError:
             continue
-    if len(bars) < 220:
-        raise RuntimeError("Stooq 返回的 QQQ 日线不足 220 条，无法计算长期指标")
-    return bars
+    return require_min_qqq_bars(bars, "Stooq")
 
 
 def require_min_qqq_bars(bars: list[Bar], source: str) -> list[Bar]:
-    if len(bars) < 220:
-        raise RuntimeError(f"{source} 返回的 QQQ 日线不足 220 条，无法计算长期指标")
+    if len(bars) < MIN_QQQ_BARS:
+        raise RuntimeError(f"{source} 返回的 QQQ 日线不足 {MIN_QQQ_BARS} 条，无法计算指标")
     return bars
 
 
@@ -799,7 +798,7 @@ def load_qqq_bars_cache(path: Path) -> tuple[list[Bar], str] | None:
     if not isinstance(data, dict):
         return None
     bars = deserialize_bars(data.get("bars", []))
-    if len(bars) < 220:
+    if len(bars) < MIN_QQQ_BARS:
         return None
     source = str(data.get("source") or "unknown")
     cached_at = data.get("cached_at")
@@ -888,6 +887,13 @@ def moving_average(values: list[float], window: int) -> float:
     return statistics.fmean(values[-window:])
 
 
+def moving_average_available(values: list[float], window: int) -> tuple[float, int]:
+    actual_window = min(window, len(values))
+    if actual_window <= 0:
+        raise ValueError("not enough values for moving average")
+    return statistics.fmean(values[-actual_window:]), actual_window
+
+
 def rsi(values: list[float], period: int = 14) -> float:
     if len(values) <= period:
         raise ValueError("not enough values for RSI")
@@ -906,7 +912,7 @@ def rsi(values: list[float], period: int = 14) -> float:
 
 
 def max_drawdown_from_high(values: list[float], window: int = 252) -> float:
-    recent = values[-window:]
+    recent = values[-min(window, len(values)) :]
     high = max(recent)
     return (recent[-1] / high - 1.0) * 100
 
@@ -1121,7 +1127,7 @@ def score_market(bars: list[Bar], params: dict[str, Any] | None = None, external
     last = closes[-1]
     ma20 = moving_average(closes, 20)
     ma60 = moving_average(closes, 60)
-    ma200 = moving_average(closes, 200)
+    ma200, ma200_window = moving_average_available(closes, 200)
     prev_ma20 = statistics.fmean(closes[-25:-5]) if len(closes) >= 25 else ma20
     prev_ma60 = statistics.fmean(closes[-80:-20]) if len(closes) >= 80 else ma60
     current_rsi = rsi(closes)
@@ -1141,6 +1147,7 @@ def score_market(bars: list[Bar], params: dict[str, Any] | None = None, external
         "ma20": round(ma20, 4),
         "ma60": round(ma60, 4),
         "ma200": round(ma200, 4),
+        "ma200_window": ma200_window,
         "rsi14": round(current_rsi, 2),
         "drawdown_from_252d_high_pct": round(drawdown, 2),
         "distance_from_ma20_pct": round(extended_from_20, 2),
