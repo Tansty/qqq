@@ -325,6 +325,7 @@ write_env_if_needed() {
 QWEN_API_KEY=${QWEN_API_KEY:-}
 QWEN_MODEL=${QWEN_MODEL:-qwen3.6-plus-2026-04-02}
 QWEN_BASE_URL=${QWEN_BASE_URL:-https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions}
+FEISHU_WEBHOOK_URL=${FEISHU_WEBHOOK_URL:-}
 
 QQQ_TWELVE_DATA_API_KEY=${QQQ_TWELVE_DATA_API_KEY:-}
 QQQ_TIINGO_API_TOKEN=${QQQ_TIINGO_API_TOKEN:-}

@@ -97,7 +97,7 @@ advisor
 | 重启服务 | `./restart.sh` |
 | 停止服务 | `./stop.sh` |
 | 查看容器 | `sudo docker compose ps` |
-| 查看日志 | `sudo docker compose logs --tail=120 qqq-advisor` |
+| 查看日志 | `./logs.sh` 或 `cd ~/qqq && sudo docker compose logs --tail=120 qqq-advisor` |
 | 手动跑日报 | `sudo docker compose exec -T qqq-advisor python3 qqq_agent.py daily --config /app/storage/config.json` |
 | 备份数据 | `./scripts/backup_storage.sh` |
 | 安装定时任务 | `./scripts/install_cron_daily.sh` |

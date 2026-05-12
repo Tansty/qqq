@@ -12,6 +12,7 @@ import argparse
 import json
 import os
 import random
+import sys
 import time
 import urllib.request
 from copy import deepcopy
@@ -106,6 +107,56 @@ def append_json_log(path: Path, record: dict[str, Any]) -> None:
     records = load_json(path, [])
     records.append(record)
     save_json(path, records)
+
+
+def post_feishu_text(text: str) -> bool:
+    webhook = os.environ.get("FEISHU_WEBHOOK_URL", "").strip()
+    if not webhook:
+        return False
+    body = json.dumps({"msg_type": "text", "content": {"text": text}}, ensure_ascii=False).encode("utf-8")
+    req = urllib.request.Request(
+        webhook,
+        data=body,
+        headers={"Content-Type": "application/json; charset=utf-8"},
+        method="POST",
+    )
+    with urllib.request.urlopen(req, timeout=15) as resp:
+        resp.read()
+    return True
+
+
+def format_daily_notification(result: dict[str, Any]) -> str:
+    report = result["report"]
+    market = report["market"]
+    decision = report["decision"]
+    evolution = result.get("evolution", {})
+    lines = [
+        "QQQ Advisor 每日结果",
+        f"生成时间: {report.get('generated_at')}",
+        f"市场日期: {market.get('date')}",
+        f"数据源: {market.get('source')}",
+        f"收盘: {market.get('close')}",
+        f"评分/动作: {market.get('score')}/100 · {decision.get('action')}",
+        f"建议买入: {decision.get('buy_now_cny')} 元",
+        f"建议卖出: {decision.get('sell_now_cny', 0)} 元",
+        f"理由: {decision.get('reason')}",
+    ]
+    if market.get("data_warning"):
+        lines.append(f"数据提示: {market.get('data_warning')}")
+    if market.get("warnings"):
+        lines.append("数据源错误: " + " | ".join(str(item)[:160] for item in market.get("warnings", [])[-2:]))
+    if evolution:
+        applied = evolution.get("applied", evolution.get("should_apply"))
+        reason = evolution.get("reason") or evolution.get("summary") or evolution.get("decision")
+        lines.append(f"模型进化: applied={applied} {reason or ''}".strip())
+    return "\n".join(lines)
+
+
+def notify_daily_failure(exc: Exception) -> None:
+    try:
+        post_feishu_text(f"QQQ Advisor 每日任务失败\n错误: {type(exc).__name__}: {exc}")
+    except Exception as notify_exc:  # noqa: BLE001 - notification must not hide original failure
+        print(f"飞书失败通知发送失败: {notify_exc}", file=sys.stderr)
 
 
 def completed_items(evaluation: dict[str, Any], horizon: str = "20d") -> list[dict[str, Any]]:
@@ -938,7 +989,12 @@ def evolve(config: dict[str, Any], use_qwen: bool = True) -> dict[str, Any]:
 def run_daily(config: dict[str, Any], use_qwen: bool = True) -> dict[str, Any]:
     report = generate_report(config, persist=True)
     evolution = evolve(config, use_qwen=use_qwen)
-    return {"report": report, "evolution": evolution}
+    result = {"report": report, "evolution": evolution}
+    try:
+        post_feishu_text(format_daily_notification(result))
+    except Exception as exc:  # noqa: BLE001 - daily job should still succeed if notification fails
+        print(f"飞书通知发送失败: {exc}", file=sys.stderr)
+    return result
 
 
 def main() -> int:
@@ -957,7 +1013,11 @@ def main() -> int:
 
     config = load_config(Path(args.config))
     if args.command == "daily":
-        result = run_daily(config, use_qwen=not args.no_qwen)
+        try:
+            result = run_daily(config, use_qwen=not args.no_qwen)
+        except Exception as exc:  # noqa: BLE001
+            notify_daily_failure(exc)
+            raise
         print(json.dumps(result["evolution"], ensure_ascii=False, indent=2))
         return 0
     if args.command == "evolve":
