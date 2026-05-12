@@ -23,6 +23,14 @@ need_command() {
   command -v "$1" >/dev/null 2>&1
 }
 
+linux_id() {
+  if [ -f /etc/os-release ]; then
+    # shellcheck disable=SC1091
+    . /etc/os-release
+    echo "${ID:-}"
+  fi
+}
+
 run_as_root() {
   if [ "$(id -u)" -eq 0 ]; then
     "$@"
@@ -58,8 +66,83 @@ docker_usable() {
   docker info >/dev/null 2>&1
 }
 
+sudo_docker_usable() {
+  need_command sudo && sudo -n docker info >/dev/null 2>&1
+}
+
+docker_cmd() {
+  if docker_usable; then
+    docker "$@"
+  elif sudo_docker_usable; then
+    sudo docker "$@"
+  else
+    echo "Docker 服务未正常可用，或当前用户没有 Docker 权限。" >&2
+    exit 1
+  fi
+}
+
+install_docker_with_package_manager() {
+  if need_command dnf; then
+    run_as_root dnf install -y docker
+    run_as_root dnf install -y docker-compose-plugin || true
+  elif need_command yum; then
+    run_as_root yum install -y docker
+    run_as_root yum install -y docker-compose-plugin || true
+  elif need_command apt-get; then
+    curl -fsSL https://get.docker.com -o /tmp/get-docker.sh
+    run_as_root sh /tmp/get-docker.sh
+  else
+    echo "无法自动安装 Docker，请先手动安装后重试。" >&2
+    exit 1
+  fi
+}
+
+install_compose_plugin_if_missing() {
+  if docker_cmd compose version >/dev/null 2>&1; then
+    return
+  fi
+
+  if need_command dnf; then
+    run_as_root dnf install -y docker-compose-plugin || true
+  elif need_command yum; then
+    run_as_root yum install -y docker-compose-plugin || true
+  elif need_command apt-get; then
+    run_as_root apt-get update
+    run_as_root apt-get install -y docker-compose-plugin || true
+  fi
+
+  if docker_cmd compose version >/dev/null 2>&1; then
+    return
+  fi
+
+  install_package_if_missing curl curl
+  local arch
+  arch="$(uname -m)"
+  case "$arch" in
+    x86_64|amd64) arch="x86_64" ;;
+    aarch64|arm64) arch="aarch64" ;;
+    *)
+      echo "不支持自动安装 Docker Compose 插件的架构: $arch" >&2
+      exit 1
+      ;;
+  esac
+
+  info "安装 Docker Compose 插件"
+  run_as_root mkdir -p /usr/local/lib/docker/cli-plugins
+  run_as_root curl -fSL \
+    "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-${arch}" \
+    -o /usr/local/lib/docker/cli-plugins/docker-compose
+  run_as_root chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+
+  if ! docker_cmd compose version >/dev/null 2>&1; then
+    echo "Docker Compose 插件安装失败，请检查网络或手动安装 docker compose。" >&2
+    exit 1
+  fi
+}
+
 install_docker_if_missing() {
   if need_command docker && docker_usable; then
+    install_compose_plugin_if_missing
     return
   fi
 
@@ -72,8 +155,12 @@ install_docker_if_missing() {
 
   if ! need_command docker; then
     info "安装 Docker"
-    curl -fsSL https://get.docker.com -o /tmp/get-docker.sh
-    run_as_root sh /tmp/get-docker.sh
+    if [ "$(linux_id)" = "amzn" ]; then
+      install_docker_with_package_manager
+    else
+      curl -fsSL https://get.docker.com -o /tmp/get-docker.sh
+      run_as_root sh /tmp/get-docker.sh
+    fi
   fi
 
   if need_command systemctl; then
@@ -82,16 +169,16 @@ install_docker_if_missing() {
     run_as_root service docker start || true
   fi
 
-  if ! docker_usable; then
-    if [ "$(id -u)" -ne 0 ]; then
-      echo "Docker 已安装，但当前用户还不能直接访问 Docker。" >&2
-      echo "请执行下面命令后重新登录，再运行 ./deploy.sh：" >&2
-      echo "  sudo usermod -aG docker $USER" >&2
-      exit 1
-    fi
+  if [ "$(id -u)" -ne 0 ] && getent group docker >/dev/null 2>&1; then
+    run_as_root usermod -aG docker "$USER" || true
+  fi
+
+  if ! docker_usable && ! sudo_docker_usable; then
     echo "Docker 服务未正常可用，请检查 docker service 状态。" >&2
     exit 1
   fi
+
+  install_compose_plugin_if_missing
 }
 
 install_cron_if_missing() {
@@ -167,7 +254,7 @@ EOF
 
 compose_up() {
   info "构建并启动 QQQ Advisor"
-  docker compose up -d --build
+  docker_cmd compose up -d --build
 }
 
 install_daily_job() {

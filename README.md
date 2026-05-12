@@ -62,6 +62,7 @@ QQQ_ADVISOR_PORT=8766 ./start_web.sh
 这个脚本会自动完成：
 
 - 安装 Docker 和 Docker Compose 插件。
+- 兼容 Ubuntu/Debian、CentOS/RHEL/Fedora、Amazon Linux 2/2023。
 - 安装 cron。
 - 生成 `.env` 和随机网页登录密码。
 - 初始化 `storage/config.json` 与 `storage/data/`。
