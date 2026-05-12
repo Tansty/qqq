@@ -944,7 +944,7 @@ def run_daily(config: dict[str, Any], use_qwen: bool = True) -> dict[str, Any]:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run the local self-improving QQQ advisor agent")
     parser.add_argument("command", choices=["daily", "evolve", "train", "status"], help="daily 生成建议并尝试进化；evolve 仅复盘调参；train 用历史窗口训练；status 查看agent状态")
-    parser.add_argument("--config", default="config.json")
+    parser.add_argument("--config", default=os.environ.get("QQQ_ADVISOR_CONFIG", "config.json"))
     parser.add_argument("--no-qwen", action="store_true", help="不调用Qwen，只使用本地规则进化")
     parser.add_argument("--lookback", default=100, type=int, help="train 使用最近多少个可标注交易日")
     parser.add_argument("--horizon", default=20, type=int, help="train 使用多少交易日后的收益做标签")

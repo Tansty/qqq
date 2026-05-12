@@ -272,7 +272,25 @@ Agent 会认为模型可能买入太激进，于是候选参数会：
 
 ## 8. 推荐定时任务
 
-中国时区建议每天早上 `07:00` 以后运行：
+Docker Compose 云服务器部署时，建议让宿主机 cron 调用容器内任务：
+
+```bash
+./scripts/install_cron_daily.sh
+```
+
+默认安装：
+
+```cron
+0 7 * * 2-6 cd 项目目录 && ./scripts/run_daily_docker.sh # qqq-advisor-daily
+```
+
+日志写入：
+
+```text
+storage/logs/daily-YYYYMMDD.log
+```
+
+裸机运行时，中国时区建议每天早上 `07:00` 以后运行：
 
 ```bash
 cd /Users/dz0401012/Desktop/pythonProject/qqq && python3 qqq_agent.py daily

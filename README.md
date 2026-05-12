@@ -98,7 +98,45 @@ http://你的服务器IP:8765
 
 如果你前面接 Nginx/Caddy 和域名，容器仍然只需要暴露本机端口，HTTPS 交给反向代理处理。
 
-### 4. 备份
+### 4. 安装每日定时任务
+
+中国时区建议周二到周六早上 `07:00` 运行，对应美股周一到周五收盘后的数据：
+
+```bash
+./scripts/install_cron_daily.sh
+```
+
+它会安装一条宿主机 cron：
+
+```cron
+0 7 * * 2-6 cd 当前项目目录 && ./scripts/run_daily_docker.sh # qqq-advisor-daily
+```
+
+每日任务会进入正在运行的 `qqq-advisor` 容器执行：
+
+```bash
+python3 qqq_agent.py daily --config /app/storage/config.json
+```
+
+运行日志保存在：
+
+```text
+storage/logs/daily-YYYYMMDD.log
+```
+
+如果想改执行时间，例如每天 08:30：
+
+```bash
+QQQ_DAILY_CRON="30 8 * * 2-6" ./scripts/install_cron_daily.sh
+```
+
+卸载定时任务：
+
+```bash
+./scripts/uninstall_cron_daily.sh
+```
+
+### 5. 备份
 
 备份整个持久化目录：
 
@@ -114,7 +152,7 @@ backups/qqq-storage-YYYYMMDD-HHMMSS.tar.gz
 
 建议再把这个压缩包同步到另一台机器或对象存储。只留在同一台云服务器上，不算真正备份。
 
-### 5. 迁移到新服务器
+### 6. 迁移到新服务器
 
 在旧服务器打包：
 
@@ -397,7 +435,9 @@ data/actual_trades.json
 
 ## 每日定时运行
 
-美股收盘后数据更完整。中国时区建议每天早上 `07:00` 以后运行：
+如果是 Docker Compose 云服务器部署，优先使用上面的 `./scripts/install_cron_daily.sh`。
+
+裸机运行时，美股收盘后数据更完整。中国时区建议每天早上 `07:00` 以后运行：
 
 ```bash
 python3 /Users/dz0401012/Desktop/pythonProject/qqq/qqq_advisor.py run --config /Users/dz0401012/Desktop/pythonProject/qqq/config.json
