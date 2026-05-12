@@ -51,6 +51,51 @@ QQQ_ADVISOR_PORT=8766 ./start_web.sh
 
 如果要放到云服务器上长期自用，推荐用 Docker Compose 部署，并把所有可变数据放在宿主机的 `storage/` 目录。这样应用镜像可以随时重建，真正需要保护和迁移的是 `storage/`。
 
+### 一键部署
+
+在 Linux 云服务器上 clone 仓库后执行：
+
+```bash
+./deploy.sh
+```
+
+这个脚本会自动完成：
+
+- 安装 Docker 和 Docker Compose 插件。
+- 安装 cron。
+- 生成 `.env` 和随机网页登录密码。
+- 初始化 `storage/config.json` 与 `storage/data/`。
+- 构建并启动 `qqq-advisor` 容器。
+- 安装每日定时任务。
+
+默认访问地址：
+
+```text
+http://你的服务器IP:8765
+```
+
+默认定时任务是中国时区周二到周六早上 `07:00`，对应美股周一到周五收盘后的数据。日志写入：
+
+```text
+storage/logs/daily-YYYYMMDD.log
+```
+
+如果要自定义端口、网页登录用户名、密码或定时时间，可以在运行前指定环境变量：
+
+```bash
+QQQ_ADVISOR_PORT=8080 \
+QQQ_ADVISOR_USERNAME=advisor \
+QQQ_ADVISOR_PASSWORD=换成一个很长的随机密码 \
+QQQ_DAILY_CRON="30 8 * * 2-6" \
+./deploy.sh
+```
+
+脚本会打印网页登录用户名和密码。请保存好密码，`.env` 不会提交到 Git。
+
+### 手动部署步骤
+
+如果不想用一键脚本，也可以按下面步骤手动操作。
+
 ### 1. 准备数据目录
 
 在本机或服务器项目目录执行：
