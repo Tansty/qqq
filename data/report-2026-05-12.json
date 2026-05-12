@@ -1,0 +1,1140 @@
+{
+  "model_version": "0.2",
+  "model_params_version": "0.2.2",
+  "generated_at": "2026-05-12T10:47:12+08:00",
+  "profile": {
+    "risk_level": "balanced",
+    "horizon_years": 1.0,
+    "max_acceptable_loss_pct": 20.0,
+    "total_investable_cny": 100000.0
+  },
+  "target_nasdaq_weight_pct": 12.1,
+  "target_nasdaq_amount_cny": 12100.0,
+  "current_nasdaq_position_cny": 0.0,
+  "remaining_plan_cny": 12100.0,
+  "market": {
+    "date": "2026-05-08",
+    "close": 711.23,
+    "ma20": 660.7955,
+    "ma60": 618.3773,
+    "ma200": 607.3053,
+    "rsi14": 84.17,
+    "drawdown_from_252d_high_pct": 0.0,
+    "distance_from_ma20_pct": 7.63,
+    "distance_from_ma60_pct": 15.02,
+    "distance_from_ma200_pct": 17.11,
+    "momentum_5d_pct": 5.5,
+    "momentum_20d_pct": 16.39,
+    "momentum_60d_pct": 16.0,
+    "ma20_slope_pct": 3.54,
+    "ma60_slope_pct": 2.35,
+    "annualized_vol20_pct": 15.57,
+    "annualized_vol60_pct": 19.68,
+    "qqq_volume": 44146300.0,
+    "qqq_volume_ratio20": 1.0964,
+    "qqq_volume_trend20_pct": -36.7,
+    "vix_close": 17.19,
+    "vix_momentum_20d_pct": -10.61,
+    "us10y_close": 4.364,
+    "us10y_momentum_20d_pct": 1.09,
+    "dxy_close": 97.84,
+    "dxy_momentum_20d_pct": -0.82,
+    "score": 28,
+    "action": "暂不买入",
+    "factor_contributions": [
+      {
+        "name": "rsi_hot",
+        "raw_points": -22.0,
+        "weight": 1.0,
+        "points": -22.0
+      }
+    ],
+    "source": "cached_report:cached_report:yahoo",
+    "history": [
+      {
+        "date": "2025-08-21",
+        "close": 563.28
+      },
+      {
+        "date": "2025-08-22",
+        "close": 571.97
+      },
+      {
+        "date": "2025-08-25",
+        "close": 570.32
+      },
+      {
+        "date": "2025-08-26",
+        "close": 572.61
+      },
+      {
+        "date": "2025-08-27",
+        "close": 573.49
+      },
+      {
+        "date": "2025-08-28",
+        "close": 577.08
+      },
+      {
+        "date": "2025-08-29",
+        "close": 570.4
+      },
+      {
+        "date": "2025-09-02",
+        "close": 565.62
+      },
+      {
+        "date": "2025-09-03",
+        "close": 570.07
+      },
+      {
+        "date": "2025-09-04",
+        "close": 575.23
+      },
+      {
+        "date": "2025-09-05",
+        "close": 576.06
+      },
+      {
+        "date": "2025-09-08",
+        "close": 578.87
+      },
+      {
+        "date": "2025-09-09",
+        "close": 580.51
+      },
+      {
+        "date": "2025-09-10",
+        "close": 580.7
+      },
+      {
+        "date": "2025-09-11",
+        "close": 584.08
+      },
+      {
+        "date": "2025-09-12",
+        "close": 586.66
+      },
+      {
+        "date": "2025-09-15",
+        "close": 591.68
+      },
+      {
+        "date": "2025-09-16",
+        "close": 591.18
+      },
+      {
+        "date": "2025-09-17",
+        "close": 590.0
+      },
+      {
+        "date": "2025-09-18",
+        "close": 595.32
+      },
+      {
+        "date": "2025-09-19",
+        "close": 599.35
+      },
+      {
+        "date": "2025-09-22",
+        "close": 602.2
+      },
+      {
+        "date": "2025-09-23",
+        "close": 598.2
+      },
+      {
+        "date": "2025-09-24",
+        "close": 596.1
+      },
+      {
+        "date": "2025-09-25",
+        "close": 593.53
+      },
+      {
+        "date": "2025-09-26",
+        "close": 595.97
+      },
+      {
+        "date": "2025-09-29",
+        "close": 598.73
+      },
+      {
+        "date": "2025-09-30",
+        "close": 600.37
+      },
+      {
+        "date": "2025-10-01",
+        "close": 603.25
+      },
+      {
+        "date": "2025-10-02",
+        "close": 605.73
+      },
+      {
+        "date": "2025-10-03",
+        "close": 603.18
+      },
+      {
+        "date": "2025-10-06",
+        "close": 607.71
+      },
+      {
+        "date": "2025-10-07",
+        "close": 604.51
+      },
+      {
+        "date": "2025-10-08",
+        "close": 611.44
+      },
+      {
+        "date": "2025-10-09",
+        "close": 610.7
+      },
+      {
+        "date": "2025-10-10",
+        "close": 589.5
+      },
+      {
+        "date": "2025-10-13",
+        "close": 602.01
+      },
+      {
+        "date": "2025-10-14",
+        "close": 598.0
+      },
+      {
+        "date": "2025-10-15",
+        "close": 602.22
+      },
+      {
+        "date": "2025-10-16",
+        "close": 599.99
+      },
+      {
+        "date": "2025-10-17",
+        "close": 603.93
+      },
+      {
+        "date": "2025-10-20",
+        "close": 611.54
+      },
+      {
+        "date": "2025-10-21",
+        "close": 611.38
+      },
+      {
+        "date": "2025-10-22",
+        "close": 605.49
+      },
+      {
+        "date": "2025-10-23",
+        "close": 610.58
+      },
+      {
+        "date": "2025-10-24",
+        "close": 617.1
+      },
+      {
+        "date": "2025-10-27",
+        "close": 628.09
+      },
+      {
+        "date": "2025-10-28",
+        "close": 632.92
+      },
+      {
+        "date": "2025-10-29",
+        "close": 635.77
+      },
+      {
+        "date": "2025-10-30",
+        "close": 626.05
+      },
+      {
+        "date": "2025-10-31",
+        "close": 629.07
+      },
+      {
+        "date": "2025-11-03",
+        "close": 632.08
+      },
+      {
+        "date": "2025-11-04",
+        "close": 619.25
+      },
+      {
+        "date": "2025-11-05",
+        "close": 623.28
+      },
+      {
+        "date": "2025-11-06",
+        "close": 611.67
+      },
+      {
+        "date": "2025-11-07",
+        "close": 609.74
+      },
+      {
+        "date": "2025-11-10",
+        "close": 623.23
+      },
+      {
+        "date": "2025-11-11",
+        "close": 621.57
+      },
+      {
+        "date": "2025-11-12",
+        "close": 621.08
+      },
+      {
+        "date": "2025-11-13",
+        "close": 608.4
+      },
+      {
+        "date": "2025-11-14",
+        "close": 608.86
+      },
+      {
+        "date": "2025-11-17",
+        "close": 603.66
+      },
+      {
+        "date": "2025-11-18",
+        "close": 596.31
+      },
+      {
+        "date": "2025-11-19",
+        "close": 599.87
+      },
+      {
+        "date": "2025-11-20",
+        "close": 585.67
+      },
+      {
+        "date": "2025-11-21",
+        "close": 590.07
+      },
+      {
+        "date": "2025-11-24",
+        "close": 605.16
+      },
+      {
+        "date": "2025-11-25",
+        "close": 608.89
+      },
+      {
+        "date": "2025-11-26",
+        "close": 614.27
+      },
+      {
+        "date": "2025-11-28",
+        "close": 619.25
+      },
+      {
+        "date": "2025-12-01",
+        "close": 617.17
+      },
+      {
+        "date": "2025-12-02",
+        "close": 622.0
+      },
+      {
+        "date": "2025-12-03",
+        "close": 623.52
+      },
+      {
+        "date": "2025-12-04",
+        "close": 622.94
+      },
+      {
+        "date": "2025-12-05",
+        "close": 625.48
+      },
+      {
+        "date": "2025-12-08",
+        "close": 624.28
+      },
+      {
+        "date": "2025-12-09",
+        "close": 625.05
+      },
+      {
+        "date": "2025-12-10",
+        "close": 627.61
+      },
+      {
+        "date": "2025-12-11",
+        "close": 625.58
+      },
+      {
+        "date": "2025-12-12",
+        "close": 613.62
+      },
+      {
+        "date": "2025-12-15",
+        "close": 610.54
+      },
+      {
+        "date": "2025-12-16",
+        "close": 611.75
+      },
+      {
+        "date": "2025-12-17",
+        "close": 600.41
+      },
+      {
+        "date": "2025-12-18",
+        "close": 609.11
+      },
+      {
+        "date": "2025-12-19",
+        "close": 617.05
+      },
+      {
+        "date": "2025-12-22",
+        "close": 619.21
+      },
+      {
+        "date": "2025-12-23",
+        "close": 622.11
+      },
+      {
+        "date": "2025-12-24",
+        "close": 623.93
+      },
+      {
+        "date": "2025-12-26",
+        "close": 623.89
+      },
+      {
+        "date": "2025-12-29",
+        "close": 620.87
+      },
+      {
+        "date": "2025-12-30",
+        "close": 619.43
+      },
+      {
+        "date": "2025-12-31",
+        "close": 614.31
+      },
+      {
+        "date": "2026-01-02",
+        "close": 613.12
+      },
+      {
+        "date": "2026-01-05",
+        "close": 617.99
+      },
+      {
+        "date": "2026-01-06",
+        "close": 623.42
+      },
+      {
+        "date": "2026-01-07",
+        "close": 624.02
+      },
+      {
+        "date": "2026-01-08",
+        "close": 620.47
+      },
+      {
+        "date": "2026-01-09",
+        "close": 626.65
+      },
+      {
+        "date": "2026-01-12",
+        "close": 627.17
+      },
+      {
+        "date": "2026-01-13",
+        "close": 626.24
+      },
+      {
+        "date": "2026-01-14",
+        "close": 619.55
+      },
+      {
+        "date": "2026-01-15",
+        "close": 621.78
+      },
+      {
+        "date": "2026-01-16",
+        "close": 621.26
+      },
+      {
+        "date": "2026-01-20",
+        "close": 608.06
+      },
+      {
+        "date": "2026-01-21",
+        "close": 616.28
+      },
+      {
+        "date": "2026-01-22",
+        "close": 620.76
+      },
+      {
+        "date": "2026-01-23",
+        "close": 622.72
+      },
+      {
+        "date": "2026-01-26",
+        "close": 625.46
+      },
+      {
+        "date": "2026-01-27",
+        "close": 631.13
+      },
+      {
+        "date": "2026-01-28",
+        "close": 633.22
+      },
+      {
+        "date": "2026-01-29",
+        "close": 629.43
+      },
+      {
+        "date": "2026-01-30",
+        "close": 621.87
+      },
+      {
+        "date": "2026-02-02",
+        "close": 626.14
+      },
+      {
+        "date": "2026-02-03",
+        "close": 616.52
+      },
+      {
+        "date": "2026-02-04",
+        "close": 605.75
+      },
+      {
+        "date": "2026-02-05",
+        "close": 597.03
+      },
+      {
+        "date": "2026-02-06",
+        "close": 609.65
+      },
+      {
+        "date": "2026-02-09",
+        "close": 614.32
+      },
+      {
+        "date": "2026-02-10",
+        "close": 611.47
+      },
+      {
+        "date": "2026-02-11",
+        "close": 613.11
+      },
+      {
+        "date": "2026-02-12",
+        "close": 600.64
+      },
+      {
+        "date": "2026-02-13",
+        "close": 601.92
+      },
+      {
+        "date": "2026-02-17",
+        "close": 601.3
+      },
+      {
+        "date": "2026-02-18",
+        "close": 605.79
+      },
+      {
+        "date": "2026-02-19",
+        "close": 603.47
+      },
+      {
+        "date": "2026-02-20",
+        "close": 608.81
+      },
+      {
+        "date": "2026-02-23",
+        "close": 601.41
+      },
+      {
+        "date": "2026-02-24",
+        "close": 607.87
+      },
+      {
+        "date": "2026-02-25",
+        "close": 616.68
+      },
+      {
+        "date": "2026-02-26",
+        "close": 609.24
+      },
+      {
+        "date": "2026-02-27",
+        "close": 607.29
+      },
+      {
+        "date": "2026-03-02",
+        "close": 608.09
+      },
+      {
+        "date": "2026-03-03",
+        "close": 601.58
+      },
+      {
+        "date": "2026-03-04",
+        "close": 610.75
+      },
+      {
+        "date": "2026-03-05",
+        "close": 608.91
+      },
+      {
+        "date": "2026-03-06",
+        "close": 599.75
+      },
+      {
+        "date": "2026-03-09",
+        "close": 607.76
+      },
+      {
+        "date": "2026-03-10",
+        "close": 607.77
+      },
+      {
+        "date": "2026-03-11",
+        "close": 607.69
+      },
+      {
+        "date": "2026-03-12",
+        "close": 597.26
+      },
+      {
+        "date": "2026-03-13",
+        "close": 593.72
+      },
+      {
+        "date": "2026-03-16",
+        "close": 600.38
+      },
+      {
+        "date": "2026-03-17",
+        "close": 603.31
+      },
+      {
+        "date": "2026-03-18",
+        "close": 594.9
+      },
+      {
+        "date": "2026-03-19",
+        "close": 593.02
+      },
+      {
+        "date": "2026-03-20",
+        "close": 582.06
+      },
+      {
+        "date": "2026-03-23",
+        "close": 588.0
+      },
+      {
+        "date": "2026-03-24",
+        "close": 583.98
+      },
+      {
+        "date": "2026-03-25",
+        "close": 587.82
+      },
+      {
+        "date": "2026-03-26",
+        "close": 573.79
+      },
+      {
+        "date": "2026-03-27",
+        "close": 562.58
+      },
+      {
+        "date": "2026-03-30",
+        "close": 558.28
+      },
+      {
+        "date": "2026-03-31",
+        "close": 577.18
+      },
+      {
+        "date": "2026-04-01",
+        "close": 584.31
+      },
+      {
+        "date": "2026-04-02",
+        "close": 584.98
+      },
+      {
+        "date": "2026-04-06",
+        "close": 588.5
+      },
+      {
+        "date": "2026-04-07",
+        "close": 588.59
+      },
+      {
+        "date": "2026-04-08",
+        "close": 606.09
+      },
+      {
+        "date": "2026-04-09",
+        "close": 610.19
+      },
+      {
+        "date": "2026-04-10",
+        "close": 611.07
+      },
+      {
+        "date": "2026-04-13",
+        "close": 617.39
+      },
+      {
+        "date": "2026-04-14",
+        "close": 628.6
+      },
+      {
+        "date": "2026-04-15",
+        "close": 637.4
+      },
+      {
+        "date": "2026-04-16",
+        "close": 640.47
+      },
+      {
+        "date": "2026-04-17",
+        "close": 648.85
+      },
+      {
+        "date": "2026-04-20",
+        "close": 646.79
+      },
+      {
+        "date": "2026-04-21",
+        "close": 644.33
+      },
+      {
+        "date": "2026-04-22",
+        "close": 655.11
+      },
+      {
+        "date": "2026-04-23",
+        "close": 651.42
+      },
+      {
+        "date": "2026-04-24",
+        "close": 663.88
+      },
+      {
+        "date": "2026-04-27",
+        "close": 664.23
+      },
+      {
+        "date": "2026-04-28",
+        "close": 657.55
+      },
+      {
+        "date": "2026-04-29",
+        "close": 661.57
+      },
+      {
+        "date": "2026-04-30",
+        "close": 667.74
+      },
+      {
+        "date": "2026-05-01",
+        "close": 674.15
+      },
+      {
+        "date": "2026-05-04",
+        "close": 672.88
+      },
+      {
+        "date": "2026-05-05",
+        "close": 681.61
+      },
+      {
+        "date": "2026-05-06",
+        "close": 695.77
+      },
+      {
+        "date": "2026-05-07",
+        "close": 694.94
+      },
+      {
+        "date": "2026-05-08",
+        "close": 711.23
+      }
+    ],
+    "base_score_before_context": 28,
+    "context_adjustments": [],
+    "macro_context": {
+      "updated_at": null,
+      "source": "manual_local_json",
+      "currency": {
+        "usdcny": null,
+        "usdcny_change_pct_30d": null,
+        "cny_direction": "neutral"
+      },
+      "central_banks": {
+        "fed": "neutral",
+        "ecb": "neutral",
+        "pboc": "neutral",
+        "boj": "neutral",
+        "global_bias": "neutral"
+      },
+      "usd_liquidity": "neutral",
+      "events": []
+    },
+    "data_warning": "远端行情获取失败，沿用本地报告 report-2026-05-12.json 的 QQQ 市场数据。",
+    "warnings": [
+      "无法获取 QQQ 数据: stooq: Stooq 返回的 QQQ 日线不足 220 条，无法计算长期指标 | yahoo: Yahoo chart API 请求失败: query1.finance.yahoo.com: HTTP Error 429: Too Many Requests | query2.finance.yahoo.com: HTTP Error 429: Too Many Requests",
+      "无法获取 QQQ 数据: stooq: Stooq 返回的 QQQ 日线不足 220 条，无法计算长期指标 | yahoo: Yahoo chart API 请求失败: query1.finance.yahoo.com: HTTP Error 429: Too Many Requests | query2.finance.yahoo.com: HTTP Error 429: Too Many Requests"
+    ]
+  },
+  "model_params": {
+    "version": "0.2.2",
+    "min_completed_20d_for_evolution": 5,
+    "target_weights": {
+      "conservative": 0.12,
+      "balanced": 0.22,
+      "aggressive": 0.32
+    },
+    "profile_adjustments": {
+      "short_horizon_years": 1.5,
+      "short_horizon_multiplier": 0.55,
+      "long_horizon_years": 5,
+      "long_horizon_multiplier": 1.15,
+      "low_loss_pct": 10,
+      "low_loss_multiplier": 0.65,
+      "high_loss_pct": 30,
+      "high_loss_multiplier": 1.1,
+      "min_weight": 0.05,
+      "max_weight": 0.4
+    },
+    "scoring": {
+      "base_score": 50,
+      "above_ma200_bonus": 12,
+      "below_ma200_penalty": -20,
+      "above_ma60_bonus": 8,
+      "below_ma60_penalty": -6,
+      "drawdown_tiers": [
+        {
+          "max_pct": -8,
+          "points": 22
+        },
+        {
+          "max_pct": -5,
+          "points": 15
+        },
+        {
+          "max_pct": -3,
+          "points": 8
+        }
+      ],
+      "near_high_drawdown_pct": -1,
+      "ma20_extension_pct": 4,
+      "near_high_extension_penalty": -18,
+      "rsi_hot": 75,
+      "rsi_hot_penalty": -22,
+      "rsi_warm": 68,
+      "rsi_warm_penalty": -12,
+      "rsi_cold": 35,
+      "rsi_cold_bonus": 15,
+      "high_volatility_pct": 35,
+      "high_volatility_penalty": -8
+    },
+    "action_thresholds": {
+      "加仓": 80,
+      "正常买入": 64,
+      "小额试探": 42
+    },
+    "trade_fractions": {
+      "加仓": 0.35,
+      "正常买入": 0.22,
+      "小额试探": 0.09999999999999999,
+      "暂不买入": 0.0
+    },
+    "sell_rules": {
+      "enabled": true,
+      "min_sell_cny": 100,
+      "trim_excess_fraction": 0.35,
+      "max_sell_position_fraction": 0.2,
+      "score_sell_threshold": 38,
+      "rsi_take_profit": 82,
+      "near_high_drawdown_pct": -1
+    },
+    "execution_lag": {
+      "alipay_fund_nav_lag_trading_days": 1,
+      "high_volatility_pct": 25,
+      "high_volatility_penalty": -3
+    },
+    "macro_scoring": {
+      "enabled": true,
+      "max_abs_adjustment": 12,
+      "risk_off_multiplier": -2,
+      "risk_on_multiplier": 1,
+      "category_weights": {
+        "geopolitics": 1.2,
+        "war": 1.4,
+        "monetary_policy": 1.1,
+        "inflation": 1.0,
+        "recession": 1.3,
+        "trade": 1.0,
+        "regulation": 0.8,
+        "earnings": 0.8,
+        "technology": 0.7,
+        "other": 0.6
+      }
+    },
+    "currency_macro_scoring": {
+      "enabled": true,
+      "max_abs_adjustment": 8,
+      "usdcny_30d_depreciation_threshold_pct": 2.0,
+      "usdcny_30d_appreciation_threshold_pct": -2.0,
+      "cny_depreciation_points": -2,
+      "cny_appreciation_points": 1,
+      "global_rate_hike_points": -3,
+      "global_rate_cut_points": 2,
+      "usd_liquidity_tightening_points": -4,
+      "usd_liquidity_easing_points": 3
+    },
+    "factor_model": {
+      "enabled": true,
+      "score_min": 0,
+      "score_max": 100,
+      "factors": {
+        "trend_ma200": {
+          "enabled": false,
+          "type": "above_below",
+          "left": "close",
+          "right": "ma200",
+          "above_points": 12,
+          "below_points": -20,
+          "weight": 1.0,
+          "min_weight": 0.5,
+          "max_weight": 1.5
+        },
+        "trend_ma60": {
+          "enabled": false,
+          "type": "above_below",
+          "left": "close",
+          "right": "ma60",
+          "above_points": 8,
+          "below_points": -6,
+          "weight": 1.0,
+          "min_weight": 0.5,
+          "max_weight": 1.5
+        },
+        "drawdown_buy_zone": {
+          "enabled": false,
+          "type": "threshold_tiers",
+          "field": "drawdown_from_252d_high_pct",
+          "tiers": [
+            {
+              "op": "<=",
+              "value": -8,
+              "points": 22
+            },
+            {
+              "op": "<=",
+              "value": -5,
+              "points": 15
+            },
+            {
+              "op": "<=",
+              "value": -3,
+              "points": 8
+            }
+          ],
+          "weight": 1.2,
+          "min_weight": 0.5,
+          "max_weight": 1.5
+        },
+        "near_high_extension": {
+          "enabled": false,
+          "type": "all_conditions",
+          "conditions": [
+            {
+              "field": "drawdown_from_252d_high_pct",
+              "op": ">",
+              "value": -1
+            },
+            {
+              "field": "distance_from_ma20_pct",
+              "op": ">",
+              "value": 4
+            }
+          ],
+          "points": -18,
+          "weight": 1.0,
+          "min_weight": 0.5,
+          "max_weight": 1.5
+        },
+        "rsi_hot": {
+          "enabled": true,
+          "type": "threshold",
+          "field": "rsi14",
+          "op": ">=",
+          "value": 75,
+          "points": -22,
+          "weight": 1.0,
+          "min_weight": 0.4,
+          "max_weight": 1.4
+        },
+        "rsi_warm": {
+          "enabled": true,
+          "type": "range",
+          "field": "rsi14",
+          "min": 68,
+          "max": 75,
+          "points": -12,
+          "weight": 1.0,
+          "min_weight": 0.4,
+          "max_weight": 1.4
+        },
+        "rsi_cold_above_ma200": {
+          "enabled": true,
+          "type": "all_conditions",
+          "conditions": [
+            {
+              "field": "rsi14",
+              "op": "<=",
+              "value": 35
+            },
+            {
+              "field": "close",
+              "op": ">",
+              "other_field": "ma200"
+            }
+          ],
+          "points": 15,
+          "weight": 0.9,
+          "min_weight": 0.5,
+          "max_weight": 1.5
+        },
+        "high_volatility": {
+          "enabled": true,
+          "type": "threshold",
+          "field": "annualized_vol20_pct",
+          "op": ">",
+          "value": 35,
+          "points": -8,
+          "weight": 1.0,
+          "min_weight": 0.4,
+          "max_weight": 1.6
+        },
+        "vix_stress": {
+          "enabled": false,
+          "type": "threshold",
+          "field": "vix_close",
+          "op": ">=",
+          "value": 25,
+          "points": -10,
+          "weight": 1.0,
+          "min_weight": 0.3,
+          "max_weight": 1.8
+        },
+        "us10y_rising": {
+          "enabled": false,
+          "type": "threshold",
+          "field": "us10y_momentum_20d_pct",
+          "op": ">=",
+          "value": 5,
+          "points": -6,
+          "weight": 1.0,
+          "min_weight": 0.3,
+          "max_weight": 1.8
+        },
+        "dxy_rising": {
+          "enabled": false,
+          "type": "threshold",
+          "field": "dxy_momentum_20d_pct",
+          "op": ">=",
+          "value": 2,
+          "points": -5,
+          "weight": 1.0,
+          "min_weight": 0.3,
+          "max_weight": 1.8
+        },
+        "qqq_volume_spike": {
+          "enabled": false,
+          "type": "threshold",
+          "field": "qqq_volume_ratio20",
+          "op": ">=",
+          "value": 1.5,
+          "points": -4,
+          "weight": 1.0,
+          "min_weight": 0.3,
+          "max_weight": 1.8
+        }
+      }
+    },
+    "updated_at": "2026-05-11T10:06:48+08:00",
+    "updated_by": "qqq_agent_external_factor_safety_reset"
+  },
+  "execution_plan": {
+    "platform": "alipay_fund",
+    "assumed_rule": "T+1",
+    "order_date": "2026-05-12",
+    "estimated_nav_date": "2026-05-13",
+    "note": "按支付宝基金 T+1 估算确认/成交净值；如遇周末、境内外节假日或基金公告，以支付宝页面为准。"
+  },
+  "decision": {
+    "action": "暂不买入",
+    "buy_now_cny": 0.0,
+    "sell_now_cny": 0.0,
+    "reason": "模型认为短线性价比不足，保留现金等待回撤或下一次定投日。",
+    "holding_days_warning": "QDII/支付宝基金确认和到账较慢，短于7天赎回通常成本很高；本工具按中长期分批买入设计。"
+  },
+  "manual_order": {
+    "status": "no_order",
+    "message": "今日没有生成手动交易单。"
+  },
+  "fund_candidates": [
+    {
+      "code": "270042",
+      "name": "广发纳斯达克100ETF联接人民币(QDII)A",
+      "nav_date": "2026-05-08",
+      "nav": 8.2334,
+      "estimate": 8.2563,
+      "estimate_time": "2026-05-12 04:00",
+      "source": "eastmoney_fundgz",
+      "note": null
+    },
+    {
+      "code": "006479",
+      "name": "广发纳斯达克100ETF联接人民币(QDII)C",
+      "nav_date": "2026-05-08",
+      "nav": 8.0937,
+      "estimate": 8.1162,
+      "estimate_time": "2026-05-12 04:00",
+      "source": "eastmoney_fundgz",
+      "note": null
+    },
+    {
+      "code": "161130",
+      "name": "易方达纳斯达克100ETF联接(QDII-LOF)A",
+      "nav_date": "2026-05-08",
+      "nav": 4.4388,
+      "estimate": 4.4512,
+      "estimate_time": "2026-05-12 04:00",
+      "source": "eastmoney_fundgz",
+      "note": null
+    }
+  ],
+  "holdings": [],
+  "manual_checks_before_order": [
+    "打开支付宝确认该基金当天是否可申购、是否限购。",
+    "确认支付宝页面显示的确认日是否符合 T+1；遇节假日可能顺延。",
+    "确认买入费率、赎回费率、C类销售服务费是否符合持有周期。",
+    "确认QDII确认日、海外节假日和赎回到账时间。",
+    "如果支付宝页面和本工具数据冲突，以支付宝交易页为准。"
+  ]
+}

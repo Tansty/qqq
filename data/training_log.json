@@ -1,0 +1,756 @@
+[
+  {
+    "generated_at": "2026-05-11T10:04:03+08:00",
+    "mode": "recent_window_training",
+    "lookback": 100,
+    "horizon": 20,
+    "sample_start": "2025-11-14",
+    "sample_end": "2026-04-10",
+    "baseline": {
+      "horizon": "20d",
+      "completed": 100,
+      "accuracy_pct": 44.0,
+      "average_return_when_buy_pct": 1.07
+    },
+    "candidate": {
+      "horizon": "20d",
+      "completed": 100,
+      "accuracy_pct": 44.0,
+      "average_return_when_buy_pct": 1.07
+    },
+    "applied": false,
+    "reasons": [
+      "20日复盘多次显示买入后下跌，候选参数提高买入门槛并降低单次买入比例。"
+    ],
+    "factor_exploration": {
+      "baseline": {
+        "horizon": "20d",
+        "completed": 100,
+        "accuracy_pct": 44.0,
+        "average_return_when_buy_pct": 1.07
+      },
+      "tested": 16,
+      "best": null
+    },
+    "params_version_before": "0.2.0",
+    "params_version_after": "0.2.0"
+  },
+  {
+    "generated_at": "2026-05-11T10:06:48+08:00",
+    "mode": "recent_window_training",
+    "lookback": 100,
+    "horizon": 20,
+    "sample_start": "2025-11-14",
+    "sample_end": "2026-04-10",
+    "baseline": {
+      "horizon": "20d",
+      "completed": 100,
+      "accuracy_pct": 44.0,
+      "average_return_when_buy_pct": 1.07,
+      "strategy_return_pct": 0.56,
+      "market_return_pct": 1.68,
+      "participation_pct": 67.4,
+      "objective_score": 25.732
+    },
+    "candidate": {
+      "horizon": "20d",
+      "completed": 100,
+      "accuracy_pct": 49.0,
+      "average_return_when_buy_pct": 1.68,
+      "strategy_return_pct": 0.8,
+      "market_return_pct": 1.68,
+      "participation_pct": 68.85,
+      "objective_score": 30.018
+    },
+    "train_split": {
+      "baseline": {
+        "horizon": "20d",
+        "completed": 70,
+        "accuracy_pct": 38.57,
+        "average_return_when_buy_pct": -0.68,
+        "strategy_return_pct": -0.37,
+        "market_return_pct": -0.68,
+        "participation_pct": 73.5,
+        "objective_score": 16.1695
+      },
+      "candidate": {
+        "horizon": "20d",
+        "completed": 70,
+        "accuracy_pct": 38.57,
+        "average_return_when_buy_pct": -0.68,
+        "strategy_return_pct": -0.36,
+        "market_return_pct": -0.68,
+        "participation_pct": 73.07,
+        "objective_score": 16.1851
+      }
+    },
+    "validation_split": {
+      "baseline": {
+        "horizon": "20d",
+        "completed": 30,
+        "accuracy_pct": 56.67,
+        "average_return_when_buy_pct": 5.99,
+        "strategy_return_pct": 2.74,
+        "market_return_pct": 7.19,
+        "participation_pct": 53.17,
+        "objective_score": 49.7681
+      },
+      "candidate": {
+        "horizon": "20d",
+        "completed": 30,
+        "accuracy_pct": 73.33,
+        "average_return_when_buy_pct": 7.19,
+        "strategy_return_pct": 3.5,
+        "market_return_pct": 7.19,
+        "participation_pct": 59.0,
+        "objective_score": 62.2655
+      }
+    },
+    "applied": true,
+    "reasons": [
+      "20日复盘多次显示买入后下跌，候选参数提高买入门槛并降低单次买入比例。",
+      "训练集因子权重探索发现候选：组合探索 drawdown_buy_zone:1.0->1.2; rsi_cold_above_ma200:1.0->0.9; 小额试探阈值:45->42"
+    ],
+    "factor_exploration": {
+      "baseline": {
+        "horizon": "20d",
+        "completed": 70,
+        "accuracy_pct": 38.57,
+        "average_return_when_buy_pct": -0.68,
+        "strategy_return_pct": -0.4,
+        "market_return_pct": -0.68,
+        "participation_pct": 70.5,
+        "objective_score": 15.7795
+      },
+      "tested": 111,
+      "best": {
+        "reason": "组合探索 drawdown_buy_zone:1.0->1.2; rsi_cold_above_ma200:1.0->0.9; 小额试探阈值:45->42",
+        "score": {
+          "horizon": "20d",
+          "completed": 70,
+          "accuracy_pct": 38.57,
+          "average_return_when_buy_pct": -0.68,
+          "strategy_return_pct": -0.36,
+          "market_return_pct": -0.68,
+          "participation_pct": 73.07,
+          "objective_score": 16.1851
+        },
+        "version": "0.2.2"
+      }
+    },
+    "params_version_before": "0.2.0",
+    "params_version_after": "0.2.2"
+  },
+  {
+    "generated_at": "2026-05-11T10:09:18+08:00",
+    "mode": "recent_window_training",
+    "lookback": 100,
+    "horizon": 20,
+    "search_iterations": 1200,
+    "optimize": "accuracy",
+    "target_accuracy": 80.0,
+    "sample_start": "2025-11-14",
+    "sample_end": "2026-04-10",
+    "baseline": {
+      "horizon": "20d",
+      "completed": 100,
+      "accuracy_pct": 49.0,
+      "average_return_when_buy_pct": 1.68,
+      "strategy_return_pct": 0.8,
+      "market_return_pct": 1.68,
+      "participation_pct": 68.85,
+      "objective_score": 30.018
+    },
+    "candidate": {
+      "horizon": "20d",
+      "completed": 100,
+      "accuracy_pct": 49.0,
+      "average_return_when_buy_pct": 1.68,
+      "strategy_return_pct": 0.63,
+      "market_return_pct": 1.68,
+      "participation_pct": 66.15,
+      "objective_score": 28.952
+    },
+    "train_split": {
+      "baseline": {
+        "horizon": "20d",
+        "completed": 70,
+        "accuracy_pct": 38.57,
+        "average_return_when_buy_pct": -0.68,
+        "strategy_return_pct": -0.36,
+        "market_return_pct": -0.68,
+        "participation_pct": 73.07,
+        "objective_score": 16.1851
+      },
+      "candidate": {
+        "horizon": "20d",
+        "completed": 70,
+        "accuracy_pct": 38.57,
+        "average_return_when_buy_pct": -0.68,
+        "strategy_return_pct": -0.4,
+        "market_return_pct": -0.68,
+        "participation_pct": 70.5,
+        "objective_score": 15.7795
+      }
+    },
+    "validation_split": {
+      "baseline": {
+        "horizon": "20d",
+        "completed": 30,
+        "accuracy_pct": 73.33,
+        "average_return_when_buy_pct": 7.19,
+        "strategy_return_pct": 3.5,
+        "market_return_pct": 7.19,
+        "participation_pct": 59.0,
+        "objective_score": 62.2655
+      },
+      "candidate": {
+        "horizon": "20d",
+        "completed": 30,
+        "accuracy_pct": 73.33,
+        "average_return_when_buy_pct": 7.19,
+        "strategy_return_pct": 3.05,
+        "market_return_pct": 7.19,
+        "participation_pct": 56.0,
+        "objective_score": 59.7755
+      }
+    },
+    "applied": false,
+    "reached_target": false,
+    "reasons": [
+      "20日复盘多次显示买入后下跌，候选参数提高买入门槛并降低单次买入比例。"
+    ],
+    "factor_exploration": {
+      "baseline": {
+        "horizon": "20d",
+        "completed": 70,
+        "accuracy_pct": 38.57,
+        "average_return_when_buy_pct": -0.68,
+        "strategy_return_pct": -0.4,
+        "market_return_pct": -0.68,
+        "participation_pct": 70.5,
+        "objective_score": 15.7795
+      },
+      "tested": 1231,
+      "best": null
+    },
+    "params_version_before": "0.2.2",
+    "params_version_after": "0.2.2"
+  },
+  {
+    "generated_at": "2026-05-11T10:09:36+08:00",
+    "mode": "recent_window_training",
+    "lookback": 100,
+    "horizon": 5,
+    "search_iterations": 1200,
+    "optimize": "accuracy",
+    "target_accuracy": 80.0,
+    "sample_start": "2025-12-08",
+    "sample_end": "2026-05-01",
+    "baseline": {
+      "horizon": "5d",
+      "completed": 100,
+      "accuracy_pct": 43.0,
+      "average_return_when_buy_pct": 0.26,
+      "strategy_return_pct": 0.14,
+      "market_return_pct": 0.55,
+      "participation_pct": 57.05,
+      "objective_score": 20.834
+    },
+    "candidate": {
+      "horizon": "5d",
+      "completed": 100,
+      "accuracy_pct": 42.0,
+      "average_return_when_buy_pct": 0.14,
+      "strategy_return_pct": 0.05,
+      "market_return_pct": 0.55,
+      "participation_pct": 45.05,
+      "objective_score": 18.834
+    },
+    "train_split": {
+      "baseline": {
+        "horizon": "5d",
+        "completed": 70,
+        "accuracy_pct": 41.43,
+        "average_return_when_buy_pct": -0.46,
+        "strategy_return_pct": -0.25,
+        "market_return_pct": -0.46,
+        "participation_pct": 69.21,
+        "objective_score": 17.8673
+      },
+      "candidate": {
+        "horizon": "5d",
+        "completed": 70,
+        "accuracy_pct": 42.86,
+        "average_return_when_buy_pct": -0.43,
+        "strategy_return_pct": -0.24,
+        "market_return_pct": -0.46,
+        "participation_pct": 56.36,
+        "objective_score": 17.4498
+      }
+    },
+    "validation_split": {
+      "baseline": {
+        "horizon": "5d",
+        "completed": 30,
+        "accuracy_pct": 46.67,
+        "average_return_when_buy_pct": 3.04,
+        "strategy_return_pct": 1.05,
+        "market_return_pct": 2.91,
+        "participation_pct": 28.67,
+        "objective_score": 29.9581
+      },
+      "candidate": {
+        "horizon": "5d",
+        "completed": 30,
+        "accuracy_pct": 40.0,
+        "average_return_when_buy_pct": 3.37,
+        "strategy_return_pct": 0.72,
+        "market_return_pct": 2.91,
+        "participation_pct": 18.67,
+        "objective_score": 25.8336
+      }
+    },
+    "applied": false,
+    "reached_target": false,
+    "reasons": [
+      "20日复盘多次显示买入后下跌，候选参数提高买入门槛并降低单次买入比例。",
+      "训练集因子权重探索发现候选：组合探索 trend_ma60:1.0->0.9; near_high_extension:1.0->1.1; 小额试探阈值:42->50; 正常买入阈值:66->69; 小额试探比例:0.07999999999999999->0.12"
+    ],
+    "factor_exploration": {
+      "baseline": {
+        "horizon": "5d",
+        "completed": 70,
+        "accuracy_pct": 41.43,
+        "average_return_when_buy_pct": -0.46,
+        "strategy_return_pct": -0.26,
+        "market_return_pct": -0.46,
+        "participation_pct": 68.36,
+        "objective_score": 17.7493
+      },
+      "tested": 1231,
+      "best": {
+        "reason": "组合探索 trend_ma60:1.0->0.9; near_high_extension:1.0->1.1; 小额试探阈值:42->50; 正常买入阈值:66->69; 小额试探比例:0.07999999999999999->0.12",
+        "score": {
+          "horizon": "5d",
+          "completed": 70,
+          "accuracy_pct": 42.86,
+          "average_return_when_buy_pct": -0.43,
+          "strategy_return_pct": -0.24,
+          "market_return_pct": -0.46,
+          "participation_pct": 56.36,
+          "objective_score": 17.4498
+        },
+        "version": "0.2.4"
+      }
+    },
+    "params_version_before": "0.2.2",
+    "params_version_after": "0.2.2"
+  },
+  {
+    "generated_at": "2026-05-11T10:12:59+08:00",
+    "mode": "recent_window_training",
+    "lookback": 100,
+    "horizon": 20,
+    "search_iterations": 1200,
+    "optimize": "accuracy",
+    "target_accuracy": 80.0,
+    "qwen_factor_search": false,
+    "qwen_factor_variants": 0,
+    "sample_start": "2025-11-14",
+    "sample_end": "2026-04-10",
+    "baseline": {
+      "horizon": "20d",
+      "completed": 100,
+      "accuracy_pct": 49.0,
+      "average_return_when_buy_pct": 1.68,
+      "strategy_return_pct": 0.8,
+      "market_return_pct": 1.68,
+      "participation_pct": 68.85,
+      "objective_score": 30.018
+    },
+    "candidate": {
+      "horizon": "20d",
+      "completed": 100,
+      "accuracy_pct": 49.0,
+      "average_return_when_buy_pct": 1.68,
+      "strategy_return_pct": 0.63,
+      "market_return_pct": 1.68,
+      "participation_pct": 66.15,
+      "objective_score": 28.952
+    },
+    "train_split": {
+      "baseline": {
+        "horizon": "20d",
+        "completed": 70,
+        "accuracy_pct": 38.57,
+        "average_return_when_buy_pct": -0.68,
+        "strategy_return_pct": -0.36,
+        "market_return_pct": -0.68,
+        "participation_pct": 73.07,
+        "objective_score": 16.1851
+      },
+      "candidate": {
+        "horizon": "20d",
+        "completed": 70,
+        "accuracy_pct": 38.57,
+        "average_return_when_buy_pct": -0.68,
+        "strategy_return_pct": -0.4,
+        "market_return_pct": -0.68,
+        "participation_pct": 70.5,
+        "objective_score": 15.7795
+      }
+    },
+    "validation_split": {
+      "baseline": {
+        "horizon": "20d",
+        "completed": 30,
+        "accuracy_pct": 73.33,
+        "average_return_when_buy_pct": 7.19,
+        "strategy_return_pct": 3.5,
+        "market_return_pct": 7.19,
+        "participation_pct": 59.0,
+        "objective_score": 62.2655
+      },
+      "candidate": {
+        "horizon": "20d",
+        "completed": 30,
+        "accuracy_pct": 73.33,
+        "average_return_when_buy_pct": 7.19,
+        "strategy_return_pct": 3.05,
+        "market_return_pct": 7.19,
+        "participation_pct": 56.0,
+        "objective_score": 59.7755
+      }
+    },
+    "applied": false,
+    "reached_target": false,
+    "reasons": [
+      "20日复盘多次显示买入后下跌，候选参数提高买入门槛并降低单次买入比例。"
+    ],
+    "factor_exploration": {
+      "baseline": {
+        "horizon": "20d",
+        "completed": 70,
+        "accuracy_pct": 38.57,
+        "average_return_when_buy_pct": -0.68,
+        "strategy_return_pct": -0.4,
+        "market_return_pct": -0.68,
+        "participation_pct": 70.5,
+        "objective_score": 15.7795
+      },
+      "tested": 1247,
+      "best": null
+    },
+    "params_version_before": "0.2.2",
+    "params_version_after": "0.2.2"
+  },
+  {
+    "generated_at": "2026-05-11T10:14:06+08:00",
+    "mode": "recent_window_training",
+    "lookback": 100,
+    "horizon": 20,
+    "search_iterations": 1200,
+    "optimize": "accuracy",
+    "target_accuracy": 80.0,
+    "qwen_factor_search": true,
+    "qwen_factor_variants": 1,
+    "sample_start": "2025-11-14",
+    "sample_end": "2026-04-10",
+    "baseline": {
+      "horizon": "20d",
+      "completed": 100,
+      "accuracy_pct": 49.0,
+      "average_return_when_buy_pct": 1.68,
+      "strategy_return_pct": 0.8,
+      "market_return_pct": 1.68,
+      "participation_pct": 68.85,
+      "objective_score": 30.018
+    },
+    "candidate": {
+      "horizon": "20d",
+      "completed": 100,
+      "accuracy_pct": 49.0,
+      "average_return_when_buy_pct": 1.68,
+      "strategy_return_pct": 0.63,
+      "market_return_pct": 1.68,
+      "participation_pct": 66.15,
+      "objective_score": 28.952
+    },
+    "train_split": {
+      "baseline": {
+        "horizon": "20d",
+        "completed": 70,
+        "accuracy_pct": 38.57,
+        "average_return_when_buy_pct": -0.68,
+        "strategy_return_pct": -0.36,
+        "market_return_pct": -0.68,
+        "participation_pct": 73.07,
+        "objective_score": 16.1851
+      },
+      "candidate": {
+        "horizon": "20d",
+        "completed": 70,
+        "accuracy_pct": 38.57,
+        "average_return_when_buy_pct": -0.68,
+        "strategy_return_pct": -0.4,
+        "market_return_pct": -0.68,
+        "participation_pct": 70.5,
+        "objective_score": 15.7795
+      }
+    },
+    "validation_split": {
+      "baseline": {
+        "horizon": "20d",
+        "completed": 30,
+        "accuracy_pct": 73.33,
+        "average_return_when_buy_pct": 7.19,
+        "strategy_return_pct": 3.5,
+        "market_return_pct": 7.19,
+        "participation_pct": 59.0,
+        "objective_score": 62.2655
+      },
+      "candidate": {
+        "horizon": "20d",
+        "completed": 30,
+        "accuracy_pct": 73.33,
+        "average_return_when_buy_pct": 7.19,
+        "strategy_return_pct": 3.05,
+        "market_return_pct": 7.19,
+        "participation_pct": 56.0,
+        "objective_score": 59.7755
+      }
+    },
+    "applied": false,
+    "reached_target": false,
+    "reasons": [
+      "20日复盘多次显示买入后下跌，候选参数提高买入门槛并降低单次买入比例。"
+    ],
+    "factor_exploration": {
+      "baseline": {
+        "horizon": "20d",
+        "completed": 70,
+        "accuracy_pct": 38.57,
+        "average_return_when_buy_pct": -0.68,
+        "strategy_return_pct": -0.4,
+        "market_return_pct": -0.68,
+        "participation_pct": 70.5,
+        "objective_score": 15.7795
+      },
+      "tested": 1248,
+      "best": null
+    },
+    "params_version_before": "0.2.2",
+    "params_version_after": "0.2.2"
+  },
+  {
+    "generated_at": "2026-05-11T10:17:13+08:00",
+    "mode": "recent_window_training",
+    "lookback": 100,
+    "horizon": 20,
+    "search_iterations": 1200,
+    "optimize": "accuracy",
+    "target_accuracy": 80.0,
+    "qwen_factor_search": true,
+    "qwen_factor_variants": 1,
+    "sample_start": "2025-11-14",
+    "sample_end": "2026-04-10",
+    "baseline": {
+      "horizon": "20d",
+      "completed": 100,
+      "accuracy_pct": 40.0,
+      "average_return_when_buy_pct": 0.46,
+      "strategy_return_pct": 0.31,
+      "market_return_pct": 1.68,
+      "participation_pct": 62.6,
+      "objective_score": 21.478
+    },
+    "candidate": {
+      "horizon": "20d",
+      "completed": 100,
+      "accuracy_pct": 40.0,
+      "average_return_when_buy_pct": 0.46,
+      "strategy_return_pct": 0.15,
+      "market_return_pct": 1.68,
+      "participation_pct": 59.55,
+      "objective_score": 20.434
+    },
+    "train_split": {
+      "baseline": {
+        "horizon": "20d",
+        "completed": 70,
+        "accuracy_pct": 38.57,
+        "average_return_when_buy_pct": -0.68,
+        "strategy_return_pct": -0.37,
+        "market_return_pct": -0.68,
+        "participation_pct": 71.64,
+        "objective_score": 16.0207
+      },
+      "candidate": {
+        "horizon": "20d",
+        "completed": 70,
+        "accuracy_pct": 38.57,
+        "average_return_when_buy_pct": -0.68,
+        "strategy_return_pct": -0.41,
+        "market_return_pct": -0.68,
+        "participation_pct": 69.07,
+        "objective_score": 15.6151
+      }
+    },
+    "validation_split": {
+      "baseline": {
+        "horizon": "20d",
+        "completed": 30,
+        "accuracy_pct": 43.33,
+        "average_return_when_buy_pct": 4.28,
+        "strategy_return_pct": 1.91,
+        "market_return_pct": 7.19,
+        "participation_pct": 41.5,
+        "objective_score": 36.5955
+      },
+      "candidate": {
+        "horizon": "20d",
+        "completed": 30,
+        "accuracy_pct": 43.33,
+        "average_return_when_buy_pct": 4.28,
+        "strategy_return_pct": 1.48,
+        "market_return_pct": 7.19,
+        "participation_pct": 37.33,
+        "objective_score": 34.1119
+      }
+    },
+    "applied": false,
+    "reached_target": false,
+    "reasons": [
+      "20日复盘多次显示买入后下跌，候选参数提高买入门槛并降低单次买入比例。"
+    ],
+    "factor_exploration": {
+      "baseline": {
+        "horizon": "20d",
+        "completed": 70,
+        "accuracy_pct": 38.57,
+        "average_return_when_buy_pct": -0.68,
+        "strategy_return_pct": -0.41,
+        "market_return_pct": -0.68,
+        "participation_pct": 69.07,
+        "objective_score": 15.6151
+      },
+      "tested": 1272,
+      "best": null
+    },
+    "params_version_before": "0.2.2",
+    "params_version_after": "0.2.2"
+  },
+  {
+    "generated_at": "2026-05-11T10:19:55+08:00",
+    "mode": "recent_window_training",
+    "lookback": 100,
+    "horizon": 20,
+    "search_iterations": 1200,
+    "optimize": "accuracy",
+    "target_accuracy": 80.0,
+    "qwen_factor_search": true,
+    "qwen_factor_variants": 1,
+    "sample_start": "2025-11-14",
+    "sample_end": "2026-04-10",
+    "baseline": {
+      "horizon": "20d",
+      "completed": 100,
+      "accuracy_pct": 51.0,
+      "average_return_when_buy_pct": 1.81,
+      "strategy_return_pct": 0.63,
+      "market_return_pct": 1.68,
+      "participation_pct": 35.7,
+      "objective_score": 27.476
+    },
+    "candidate": {
+      "horizon": "20d",
+      "completed": 100,
+      "accuracy_pct": 52.0,
+      "average_return_when_buy_pct": 1.81,
+      "strategy_return_pct": 0.6,
+      "market_return_pct": 1.68,
+      "participation_pct": 33.25,
+      "objective_score": 27.48
+    },
+    "train_split": {
+      "baseline": {
+        "horizon": "20d",
+        "completed": 70,
+        "accuracy_pct": 41.43,
+        "average_return_when_buy_pct": -0.71,
+        "strategy_return_pct": -0.17,
+        "market_return_pct": -0.68,
+        "participation_pct": 36.0,
+        "objective_score": 15.1105
+      },
+      "candidate": {
+        "horizon": "20d",
+        "completed": 70,
+        "accuracy_pct": 42.86,
+        "average_return_when_buy_pct": -0.67,
+        "strategy_return_pct": -0.22,
+        "market_return_pct": -0.68,
+        "participation_pct": 32.5,
+        "objective_score": 15.161
+      }
+    },
+    "validation_split": {
+      "baseline": {
+        "horizon": "20d",
+        "completed": 30,
+        "accuracy_pct": 73.33,
+        "average_return_when_buy_pct": 7.19,
+        "strategy_return_pct": 2.51,
+        "market_return_pct": 7.19,
+        "participation_pct": 35.0,
+        "objective_score": 55.3955
+      },
+      "candidate": {
+        "horizon": "20d",
+        "completed": 30,
+        "accuracy_pct": 73.33,
+        "average_return_when_buy_pct": 7.19,
+        "strategy_return_pct": 2.51,
+        "market_return_pct": 7.19,
+        "participation_pct": 35.0,
+        "objective_score": 55.3955
+      }
+    },
+    "applied": false,
+    "reached_target": false,
+    "reasons": [
+      "20日复盘多次显示买入后下跌，候选参数提高买入门槛并降低单次买入比例。",
+      "训练集因子权重探索发现候选：本地发现候选因子 auto_annualized_vol60_pct_gte_17_32"
+    ],
+    "factor_exploration": {
+      "baseline": {
+        "horizon": "20d",
+        "completed": 70,
+        "accuracy_pct": 41.43,
+        "average_return_when_buy_pct": -0.71,
+        "strategy_return_pct": -0.23,
+        "market_return_pct": -0.68,
+        "participation_pct": 32.0,
+        "objective_score": 14.4905
+      },
+      "tested": 1256,
+      "best": {
+        "reason": "本地发现候选因子 auto_annualized_vol60_pct_gte_17_32",
+        "score": {
+          "horizon": "20d",
+          "completed": 70,
+          "accuracy_pct": 42.86,
+          "average_return_when_buy_pct": -0.67,
+          "strategy_return_pct": -0.22,
+          "market_return_pct": -0.68,
+          "participation_pct": 32.5,
+          "objective_score": 15.161
+        },
+        "version": "0.2.4"
+      }
+    },
+    "params_version_before": "0.2.2",
+    "params_version_after": "0.2.2"
+  }
+]

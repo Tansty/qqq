@@ -13,11 +13,7 @@
 | `static/index.html` | 网页端输入和展示界面 |
 | `config.example.json` | 可提交到 Git 的配置模板 |
 | `config.json` | 你的资金、风险偏好和当前持仓配置；默认不提交 |
-| `data/macro_context.json` | 国际局势、政治、经济和大事件摘要；默认不提交 |
-| `data/report-YYYY-MM-DD.json` | 每日完整建议报告；默认不提交 |
-| `data/advice_log.json` | 每日建议历史记录；默认不提交 |
-| `data/manual_orders.json` | 待手动确认的支付宝交易单；默认不提交 |
-| `data/actual_trades.json` | 你手动确认后的真实成交记录；默认不提交 |
+| `data/*.json` | 仓库内置一份初始 seed 数据，便于第一次部署；后续运行新增数据默认不提交 |
 | `MODEL.md` | 模型规则、评分原理、复盘逻辑和优化方法 |
 | `AGENT.md` | 自动进化 agent 的运行方式、Qwen 配置和安全边界 |
 
@@ -264,7 +260,7 @@ python3 qqq_advisor.py init
 cp config.example.json config.json
 ```
 
-然后编辑 `config.json`，或直接在网页端填写并点击“保存输入”。`config.json`、`data/`、`storage/` 和 `.env` 默认被 `.gitignore` 排除，避免把个人资产配置、历史记录和密码上传到 GitHub。
+然后编辑 `config.json`，或直接在网页端填写并点击“保存输入”。`config.json`、`storage/` 和 `.env` 默认被 `.gitignore` 排除，避免把个人资产配置、运行数据和密码上传到 GitHub。仓库里的 `data/*.json` 仅作为初始 seed 数据使用。
 
 配置示例：
 

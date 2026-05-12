@@ -1,0 +1,6 @@
+{
+  "updated_at": null,
+  "source": "manual_local_json",
+  "notes": "只写结构化摘要，不保存长新闻全文。direction 支持 risk_off/risk_on/neutral。",
+  "events": []
+}

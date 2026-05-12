@@ -1,0 +1,40 @@
+{
+  "last_run_at": "2026-05-11T10:00:22+08:00",
+  "last_decision": {
+    "generated_at": "2026-05-11T10:00:22+08:00",
+    "current_version": "0.2.0",
+    "candidate_version": "0.2.0",
+    "completed_20d": 0,
+    "min_completed_20d_for_evolution": 5,
+    "current_score": {
+      "horizon": "20d",
+      "completed": 0,
+      "accuracy_pct": null,
+      "average_return_when_buy_pct": null
+    },
+    "candidate_score": {
+      "horizon": "20d",
+      "completed": 0,
+      "accuracy_pct": null,
+      "average_return_when_buy_pct": null
+    },
+    "factor_exploration": {
+      "baseline": {
+        "horizon": "20d",
+        "completed": 0,
+        "accuracy_pct": null,
+        "average_return_when_buy_pct": null,
+        "results": []
+      },
+      "tested": 0,
+      "best": null
+    },
+    "applied": false,
+    "reasons": [
+      "没有发现足够强的系统性偏差，本轮不建议调整核心参数。"
+    ],
+    "qwen_analysis": null
+  },
+  "qwen_model": "qwen3.6-plus-2026-04-02",
+  "qwen_enabled": false
+}

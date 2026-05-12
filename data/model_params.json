@@ -1,0 +1,281 @@
+{
+  "version": "0.2.2",
+  "min_completed_20d_for_evolution": 5,
+  "target_weights": {
+    "conservative": 0.12,
+    "balanced": 0.22,
+    "aggressive": 0.32
+  },
+  "profile_adjustments": {
+    "short_horizon_years": 1.5,
+    "short_horizon_multiplier": 0.55,
+    "long_horizon_years": 5,
+    "long_horizon_multiplier": 1.15,
+    "low_loss_pct": 10,
+    "low_loss_multiplier": 0.65,
+    "high_loss_pct": 30,
+    "high_loss_multiplier": 1.1,
+    "min_weight": 0.05,
+    "max_weight": 0.4
+  },
+  "scoring": {
+    "base_score": 50,
+    "above_ma200_bonus": 12,
+    "below_ma200_penalty": -20,
+    "above_ma60_bonus": 8,
+    "below_ma60_penalty": -6,
+    "drawdown_tiers": [
+      {
+        "max_pct": -8,
+        "points": 22
+      },
+      {
+        "max_pct": -5,
+        "points": 15
+      },
+      {
+        "max_pct": -3,
+        "points": 8
+      }
+    ],
+    "near_high_drawdown_pct": -1,
+    "ma20_extension_pct": 4,
+    "near_high_extension_penalty": -18,
+    "rsi_hot": 75,
+    "rsi_hot_penalty": -22,
+    "rsi_warm": 68,
+    "rsi_warm_penalty": -12,
+    "rsi_cold": 35,
+    "rsi_cold_bonus": 15,
+    "high_volatility_pct": 35,
+    "high_volatility_penalty": -8
+  },
+  "action_thresholds": {
+    "加仓": 80,
+    "正常买入": 64,
+    "小额试探": 42
+  },
+  "trade_fractions": {
+    "加仓": 0.35,
+    "正常买入": 0.22,
+    "小额试探": 0.09999999999999999,
+    "暂不买入": 0.0
+  },
+  "sell_rules": {
+    "enabled": true,
+    "min_sell_cny": 100,
+    "trim_excess_fraction": 0.35,
+    "max_sell_position_fraction": 0.2,
+    "score_sell_threshold": 38,
+    "rsi_take_profit": 82,
+    "near_high_drawdown_pct": -1
+  },
+  "execution_lag": {
+    "alipay_fund_nav_lag_trading_days": 1,
+    "high_volatility_pct": 25,
+    "high_volatility_penalty": -3
+  },
+  "macro_scoring": {
+    "enabled": true,
+    "max_abs_adjustment": 12,
+    "risk_off_multiplier": -2,
+    "risk_on_multiplier": 1,
+    "category_weights": {
+      "geopolitics": 1.2,
+      "war": 1.4,
+      "monetary_policy": 1.1,
+      "inflation": 1.0,
+      "recession": 1.3,
+      "trade": 1.0,
+      "regulation": 0.8,
+      "earnings": 0.8,
+      "technology": 0.7,
+      "other": 0.6
+    }
+  },
+  "currency_macro_scoring": {
+    "enabled": true,
+    "max_abs_adjustment": 8,
+    "usdcny_30d_depreciation_threshold_pct": 2.0,
+    "usdcny_30d_appreciation_threshold_pct": -2.0,
+    "cny_depreciation_points": -2,
+    "cny_appreciation_points": 1,
+    "global_rate_hike_points": -3,
+    "global_rate_cut_points": 2,
+    "usd_liquidity_tightening_points": -4,
+    "usd_liquidity_easing_points": 3
+  },
+  "factor_model": {
+    "enabled": true,
+    "score_min": 0,
+    "score_max": 100,
+    "factors": {
+      "trend_ma200": {
+        "enabled": false,
+        "type": "above_below",
+        "left": "close",
+        "right": "ma200",
+        "above_points": 12,
+        "below_points": -20,
+        "weight": 1.0,
+        "min_weight": 0.5,
+        "max_weight": 1.5
+      },
+      "trend_ma60": {
+        "enabled": false,
+        "type": "above_below",
+        "left": "close",
+        "right": "ma60",
+        "above_points": 8,
+        "below_points": -6,
+        "weight": 1.0,
+        "min_weight": 0.5,
+        "max_weight": 1.5
+      },
+      "drawdown_buy_zone": {
+        "enabled": false,
+        "type": "threshold_tiers",
+        "field": "drawdown_from_252d_high_pct",
+        "tiers": [
+          {
+            "op": "<=",
+            "value": -8,
+            "points": 22
+          },
+          {
+            "op": "<=",
+            "value": -5,
+            "points": 15
+          },
+          {
+            "op": "<=",
+            "value": -3,
+            "points": 8
+          }
+        ],
+        "weight": 1.2,
+        "min_weight": 0.5,
+        "max_weight": 1.5
+      },
+      "near_high_extension": {
+        "enabled": false,
+        "type": "all_conditions",
+        "conditions": [
+          {
+            "field": "drawdown_from_252d_high_pct",
+            "op": ">",
+            "value": -1
+          },
+          {
+            "field": "distance_from_ma20_pct",
+            "op": ">",
+            "value": 4
+          }
+        ],
+        "points": -18,
+        "weight": 1.0,
+        "min_weight": 0.5,
+        "max_weight": 1.5
+      },
+      "rsi_hot": {
+        "enabled": true,
+        "type": "threshold",
+        "field": "rsi14",
+        "op": ">=",
+        "value": 75,
+        "points": -22,
+        "weight": 1.0,
+        "min_weight": 0.4,
+        "max_weight": 1.4
+      },
+      "rsi_warm": {
+        "enabled": true,
+        "type": "range",
+        "field": "rsi14",
+        "min": 68,
+        "max": 75,
+        "points": -12,
+        "weight": 1.0,
+        "min_weight": 0.4,
+        "max_weight": 1.4
+      },
+      "rsi_cold_above_ma200": {
+        "enabled": true,
+        "type": "all_conditions",
+        "conditions": [
+          {
+            "field": "rsi14",
+            "op": "<=",
+            "value": 35
+          },
+          {
+            "field": "close",
+            "op": ">",
+            "other_field": "ma200"
+          }
+        ],
+        "points": 15,
+        "weight": 0.9,
+        "min_weight": 0.5,
+        "max_weight": 1.5
+      },
+      "high_volatility": {
+        "enabled": true,
+        "type": "threshold",
+        "field": "annualized_vol20_pct",
+        "op": ">",
+        "value": 35,
+        "points": -8,
+        "weight": 1.0,
+        "min_weight": 0.4,
+        "max_weight": 1.6
+      },
+      "vix_stress": {
+        "enabled": false,
+        "type": "threshold",
+        "field": "vix_close",
+        "op": ">=",
+        "value": 25,
+        "points": -10,
+        "weight": 1.0,
+        "min_weight": 0.3,
+        "max_weight": 1.8
+      },
+      "us10y_rising": {
+        "enabled": false,
+        "type": "threshold",
+        "field": "us10y_momentum_20d_pct",
+        "op": ">=",
+        "value": 5,
+        "points": -6,
+        "weight": 1.0,
+        "min_weight": 0.3,
+        "max_weight": 1.8
+      },
+      "dxy_rising": {
+        "enabled": false,
+        "type": "threshold",
+        "field": "dxy_momentum_20d_pct",
+        "op": ">=",
+        "value": 2,
+        "points": -5,
+        "weight": 1.0,
+        "min_weight": 0.3,
+        "max_weight": 1.8
+      },
+      "qqq_volume_spike": {
+        "enabled": false,
+        "type": "threshold",
+        "field": "qqq_volume_ratio20",
+        "op": ">=",
+        "value": 1.5,
+        "points": -4,
+        "weight": 1.0,
+        "min_weight": 0.3,
+        "max_weight": 1.8
+      }
+    }
+  },
+  "updated_at": "2026-05-11T10:06:48+08:00",
+  "updated_by": "qqq_agent_external_factor_safety_reset"
+}
