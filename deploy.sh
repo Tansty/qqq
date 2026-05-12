@@ -4,12 +4,49 @@ set -euo pipefail
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$PROJECT_DIR"
 
-if [ -f ".env" ]; then
-  set -a
-  # shellcheck disable=SC1091
-  source ".env"
-  set +a
-fi
+normalize_env_file() {
+  [ -f ".env" ] || return
+  local tmp_file
+  tmp_file="$(mktemp)"
+  while IFS= read -r line || [ -n "$line" ]; do
+    case "$line" in
+      QQQ_DAILY_CRON=*)
+        local value="${line#QQQ_DAILY_CRON=}"
+        case "$value" in
+          \"*\"|\'*\') printf '%s\n' "$line" ;;
+          *" "*) printf 'QQQ_DAILY_CRON="%s"\n' "$value" ;;
+          *) printf '%s\n' "$line" ;;
+        esac
+        ;;
+      *) printf '%s\n' "$line" ;;
+    esac
+  done < ".env" > "$tmp_file"
+  mv "$tmp_file" ".env"
+}
+
+load_env_file() {
+  [ -f ".env" ] || return
+  while IFS= read -r line || [ -n "$line" ]; do
+    case "$line" in
+      ""|\#*) continue ;;
+      *=*)
+        local key="${line%%=*}"
+        local value="${line#*=}"
+        case "$key" in
+          *[!A-Za-z0-9_]*|"") continue ;;
+        esac
+        case "$value" in
+          \"*\") value="${value#\"}"; value="${value%\"}" ;;
+          \'*\') value="${value#\'}"; value="${value%\'}" ;;
+        esac
+        export "$key=$value"
+        ;;
+    esac
+  done < ".env"
+}
+
+normalize_env_file
+load_env_file
 
 PORT="${QQQ_ADVISOR_PORT:-8765}"
 USERNAME="${QQQ_ADVISOR_USERNAME:-advisor}"
@@ -290,7 +327,7 @@ QWEN_BASE_URL=${QWEN_BASE_URL:-https://dashscope.aliyuncs.com/compatible-mode/v1
 QQQ_ADVISOR_PORT=${PORT}
 QQQ_ADVISOR_USERNAME=${USERNAME}
 QQQ_ADVISOR_PASSWORD=${password}
-QQQ_DAILY_CRON=${CRON_SCHEDULE}
+QQQ_DAILY_CRON="${CRON_SCHEDULE}"
 EOF
   export QQQ_ADVISOR_PASSWORD="$password"
 

@@ -4,12 +4,28 @@ set -euo pipefail
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$PROJECT_DIR"
 
-if [ -f ".env" ]; then
-  set -a
-  # shellcheck disable=SC1091
-  source ".env"
-  set +a
-fi
+load_env_file() {
+  [ -f ".env" ] || return
+  while IFS= read -r line || [ -n "$line" ]; do
+    case "$line" in
+      ""|\#*) continue ;;
+      *=*)
+        key="${line%%=*}"
+        value="${line#*=}"
+        case "$key" in
+          *[!A-Za-z0-9_]*|"") continue ;;
+        esac
+        case "$value" in
+          \"*\") value="${value#\"}"; value="${value%\"}" ;;
+          \'*\') value="${value#\'}"; value="${value%\'}" ;;
+        esac
+        export "$key=$value"
+        ;;
+    esac
+  done < ".env"
+}
+
+load_env_file
 
 mkdir -p storage/logs
 LOG_FILE="storage/logs/daily-$(date +%Y%m%d).log"
