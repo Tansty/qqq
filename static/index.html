@@ -781,9 +781,20 @@
           headers: { "Content-Type": "application/json" },
           ...options,
         });
-        const payload = await response.json();
+        const text = await response.text();
+        let payload = null;
+        if (text) {
+          try {
+            payload = JSON.parse(text);
+          } catch (error) {
+            throw new Error(`服务端返回不是有效 JSON：${text.slice(0, 220)}`);
+          }
+        }
         if (!response.ok) {
-          throw new Error(payload.error || "请求失败");
+          throw new Error(payload?.error || text || "请求失败");
+        }
+        if (payload === null) {
+          throw new Error("服务端返回空响应");
         }
         return payload;
       }

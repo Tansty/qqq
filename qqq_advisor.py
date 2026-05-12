@@ -545,6 +545,28 @@ def first_present(row: dict[str, Any], names: tuple[str, ...]) -> Any:
     raise KeyError(names[0])
 
 
+def parse_investing_payload(raw: str, financial_id: str) -> list[Bar]:
+    if not raw.strip():
+        raise RuntimeError("Investing 返回空响应")
+    data = json.loads(raw)
+    rows = collect_investing_rows(data)
+    bars = []
+    for row in rows:
+        try:
+            day = parse_market_date(first_present(row, ("date", "rowDate", "row_date", "priceDate", "time")))
+            close = parse_market_number(first_present(row, ("last_closeRaw", "last_close_raw", "close", "price", "last_close")))
+            volume = None
+            try:
+                volume = parse_market_number(first_present(row, ("volume", "vol")))
+            except (KeyError, ValueError):
+                pass
+            bars.append(Bar(day=day, close=close, volume=volume))
+        except (KeyError, TypeError, ValueError):
+            continue
+    bars.sort(key=lambda item: item.day)
+    return require_min_qqq_bars(bars, f"Investing financialdata/{financial_id}")
+
+
 def fetch_nasdaq100_from_investing() -> list[Bar]:
     financial_id = os.environ.get("QQQ_INVESTING_FINANCIALDATA_ID", "20")
     start_day = (date.today() - timedelta(days=900)).isoformat()
@@ -567,23 +589,7 @@ def fetch_nasdaq100_from_investing() -> list[Bar]:
             "Referer": "https://cn.investing.com/",
         },
     )
-    data = json.loads(raw)
-    rows = collect_investing_rows(data)
-    bars = []
-    for row in rows:
-        try:
-            day = parse_market_date(first_present(row, ("date", "rowDate", "row_date", "priceDate", "time")))
-            close = parse_market_number(first_present(row, ("last_closeRaw", "last_close_raw", "close", "price", "last_close")))
-            volume = None
-            try:
-                volume = parse_market_number(first_present(row, ("volume", "vol")))
-            except (KeyError, ValueError):
-                pass
-            bars.append(Bar(day=day, close=close, volume=volume))
-        except (KeyError, TypeError, ValueError):
-            continue
-    bars.sort(key=lambda item: item.day)
-    return require_min_qqq_bars(bars, f"Investing financialdata/{financial_id}")
+    return parse_investing_payload(raw, financial_id)
 
 
 def fetch_qqq_from_twelve_data() -> list[Bar]:
